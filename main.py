@@ -1,6 +1,6 @@
-# Main
+# Music Festival Management System
 
-def HelloWorld():
-    print("Hello World!")
+currentTimes = ()
+currentTimeframes = []
 
-HelloWorld()
+days = int(input("How many days are you going to have the festival be? :"))
