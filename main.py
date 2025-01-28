@@ -1,6 +1,3 @@
 # Main
 
-def HelloWorld():
-    print("Hello World!")
-
-HelloWorld()
+artist_list = []
