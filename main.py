@@ -6,13 +6,12 @@ currentTimeframes = []
 
 schedule = ()
 
-artist_list = [{'name': 'Eminem', 'genre': 'Rap', 'start': schedule[9], 'end': 11.30}]
+artist_list = [{'name': 'Eminem', 'genre': 'Rap', 'start': 10.30, 'end': 11.30}]
 
 days = int(input("How many days are you going to have the festival be?:"))
 
-def ListArtists():
-    for artist in artist_list:
-        print(f'Name: {artist['name']}')
-        print(f'Genre: {artist['genre']}')
+def PrintDict(dictionary):
+    for item in dictionary:
+        print(f'{item.capitalize()}: {dictionary[item]}')
 
-ListArtists()
+PrintDict(artist_list[0])
