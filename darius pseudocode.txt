@@ -1,0 +1,84 @@
+Search Functions
+
+DEFINE FUNCTION called Search:
+
+    SET results_list to be empty
+    SET search_list to be combination of the lists of artists, attendees, and timeframes
+
+    GET query from user
+
+    FOR EACH search_term in search_list
+        IF first three letters of query match first three letters of search_term
+            ADD search_term to results_list
+
+    IF results_list is empty
+        PRINT message saying no results were found
+        END FUNCTION
+    ELSE
+        FOR EACH result in results_list
+            PRINT result
+
+-------------------------------------------
+Artist Management Functions
+SET artist_list to an empty list
+
+DEFINE FUNCTION called ListArtists:
+    FOR EACH artist in artist_list
+        PRINT artist name, genre and performance duration
+
+DEFINE FUNCTION called ArtistManagement:
+    GET user input on whether they want to open list of artists, modify list of artists, or modify the times the artists perform
+
+    IF user wants to open list of artists
+        INVOKE ListArtists
+
+    ELSE IF user wants to modify list of artists
+        GET user input on whether they want to modify an artist's information, add an artist, or remove an artist
+
+       IF user wants to modify an artist's information
+            GET artist name from user
+            GET user input on what they want to modify
+            GET user's modification
+            SET what user wants to modify to user's modification
+
+        ELSE IF user wants to add an artist
+            GET artist's name, genre, and performance duration from user
+            ADD a dictionary to artist_list containing all of the previous information
+
+        ELSE IF user wants to remove an artist
+            GET name of artist to remove from user in variable artist_name
+        
+            IF artist_name is in artist_list
+                REMOVE artist of same name from artist_list
+        
+            ELSE
+                PRINT message telling user that the artist could not be found
+
+    ELSE IF user wants to modify the time slot an artist is performing in
+        GET artist to modify time slot for from user
+
+        IF there already is a time slots where the artist is performing
+            GET desired start time from user
+
+            IF there is an artist performing at that time
+                SET that artist's time slots to the current artist's time slots
+                SET current artist's time slots to the artist who had the desired time slots
+
+            ELSE
+                SET artist performance to start in that time slot
+
+        ELSE
+
+            LOOP WHILE artist time isn't set
+                GET desired start time from user
+
+                    IF there is an artist performing at that time
+                       CONTINUE LOOP to next cycle
+                
+                    ELSE
+                        SET artist's start time to desired start time
+
+
+
+        
+    
