@@ -1,37 +1,5 @@
 #Music Festival Management System
 
-#Venue Management (Jonas Fairchild)
-import os
-venues = {}
-
-def venue_modify(): #Handles the modification for all venues.
-    venues = list(venues)
-    choice = input("Do you want to add or remove a venue?: ").lower()
-    if choice == "remove":
-        if venues != []:
-            print("Which venue do you want to remove?")
-            count = 1
-            for venue in venues:
-                print(f"{count}. {venue[0]}", end = "\n")
-            removal = input().lower()
-            for venue in venues:
-                if venue[0].lower() == removal:
-                    return set(venues.remove(venue))
-            else:
-                print("That isn't on the list of venues.")
-                return set(venues)
-        else:
-            print("There are no venues to remove.")
-            return set(venues)
-    elif choice == "add":
-        venue_name = input("What is the name of your new venue?: ")
-        return set(venues.add([[venue_name, []]]))
-    else:
-        print("That's not a valid input. Try again.")
-        venue_modify()
-
-
-
 #Jonas Fairchild, Venue Management
 
 import os
@@ -202,24 +170,36 @@ def venue_management(): #A sort of sub-main function that contains a user interf
         except:
             print("Invalid input. Try again.")
 
-# Tuple of times of in standard notation
+# Matthew McKinley, Time Management
 currentTimes = ()
 currentTimeframes = []
+schedule = []
 
-schedule = ()
+days = int(input("How many days are you going to have the festival be? :"))
+dayCount = 0
 
 def updateCurrentTimes():
     pass
-artist_list = [{'name': 'Eminem', 'genre': 'Rap', 'start': schedule[9], 'end': 11.30}]
 
-days = int(input("How many days are you going to have the festival be?:"))
+    currentTimes = currentTimes + timeNow
+    currentTimes = currentTimes + timeNowHour
 
-def ListArtists():
-    for artist in artist_list:
-        print(f'Name: {artist["name"]}')
-        print(f'Genre: {artist["genre"]}')
 
-ListArtists()
-#HIIIII
+    while timeNow <= endTime:
+        remainder = timeframeCount % 2
+        if remainder == 1:
+            timeNowHour = timeNowHour + 1
+        elif remainder == 0:
+            timeNow = timeNow + .30
 
-print("Hello World!")
+if days >= dayCount:
+    start = float(input("What time does the performance start? (Minutes are after a decimal point, ex. 10.30)"))
+    end = float(input("What time does the performance end? (Minutes are after a decimal point, ex 12.30)"))
+    timeframes = end - start
+    timeframes = timeframes / 2
+    currentTimeframes = currentTimeframes + timeframes
+    updateCurrentTimes()
+
+def performancesInDay():
+    performInDay = int(input("How many performances are in this day?"))
+    if performInDay > 0:
