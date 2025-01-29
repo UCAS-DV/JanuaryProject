@@ -216,8 +216,10 @@ schedule = []
 days = int(input("How many days are you going to have the festival be? :"))
 dayCount = 0
 
-def updateCurrentTimes():
-    pass
+def updateCurrentTimes(timeframes, startTime, endTime):
+    timeframeCount = timeframes
+    timeNow = startTime
+    timeNowHour = startTime
 
     currentTimes = currentTimes + timeNow
     currentTimes = currentTimes + timeNowHour
@@ -237,7 +239,3 @@ if days >= dayCount:
     timeframes = timeframes / 2
     currentTimeframes = currentTimeframes + timeframes
     updateCurrentTimes()
-
-def performancesInDay():
-    performInDay = int(input("How many performances are in this day?"))
-    if performInDay > 0:
