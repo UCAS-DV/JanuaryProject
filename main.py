@@ -2,11 +2,13 @@
 
 artist_list = [{'name': 'Eminem', 'genre': 'Rap'}]
 
-def print_dict(dictionary):
+heheheha = []
+
+def print_artist(dictionary):
     for property in dictionary:
         print(f'{property.capitalize()}: {dictionary[property]}')
 
-def add_dict(dictionary, target_list, prompts):
+def add_artist(dictionary, target_list, prompts):
     i = 0
     for property in dictionary:
         try:
@@ -19,10 +21,10 @@ def add_dict(dictionary, target_list, prompts):
     target_list.append(dictionary)
 
 # Prompts the user to modify a dictionary by providing them with what they can modify, then
-def modify_dict(dictionary):
+def modify_artist(dictionary):
     properties = []
 
-    print_dict(dictionary)
+    print_artist(dictionary)
     for property in dictionary:
         properties.append(property)
 
@@ -34,14 +36,4 @@ def modify_dict(dictionary):
         except:
             print('Invalid Input')
             return None
-        
-add_dict({'name': '', 'genre': 'rap'}, artist_list, ['Who is the artist? ', "What genre is the artist's performance? "])
-add_dict({'name': '', 'genre': 'rap'}, artist_list, ['Who is the artist? ', "What genre is the artist's performance? "])
-
-for artist in artist_list:
-    print_dict(artist)
-
-modify_dict(artist_list[1])
-
-for artist in artist_list:
-    print_dict(artist)
+    
