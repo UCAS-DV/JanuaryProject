@@ -260,7 +260,7 @@ currentTimes = ()
 currentTimeframes = []
 schedule = []
 
-days = int(input("How many days are you going to have the festival be? :"))
+days = 0
 dayCount = 0
 
 def updateCurrentTimes(timeframes, startTime, endTime):
@@ -279,22 +279,26 @@ def updateCurrentTimes(timeframes, startTime, endTime):
         elif remainder == 0:
             timeNow = timeNow + .30
 
-if days >= dayCount:
-    start = float(input("What time does the performance start? (Minutes are after a decimal point, ex. 10.30)"))
-    end = float(input("What time does the performance end? (Minutes are after a decimal point, ex 12.30)"))
-    timeframes = end - start
-    timeframes = timeframes / 2
-    currentTimeframes = currentTimeframes + timeframes
-    updateCurrentTimes()
+    if days >= dayCount:
+        start = float(input("What time does the performance start? (Minutes are after a decimal point, ex. 10.30)"))
+        end = float(input("What time does the performance end? (Minutes are after a decimal point, ex 12.30)"))
+        timeframes = end - start
+        timeframes = timeframes / 2
+        currentTimeframes = currentTimeframes + timeframes
+        updateCurrentTimes()
 
 #Jonas Fairchild, Master display and Main function
 
 def display_all(): #Uses a combination of display functions from every part of the code to display everything imaginable.
     print("---------- Artists ----------\n")
+    print_artists(artist_list)
     print("\n---------- Schedule ----------\n")
     print("\n---------- Venues ----------\n")
     display_venues()
     print("\n---------- Tickets/attendees ----------\n")
+
+def artist_menu():
+    print('"---------- Artists ----------')
 
 def main(): #Provides a UI that branches to every part of the program, allowing modification of everything.
     while True:
