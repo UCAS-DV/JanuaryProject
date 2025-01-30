@@ -2,61 +2,81 @@
 
 # Darius Vaiaoga, Artist Management
 
-artist_list = [{'name': 'Eminem', 'genre': 'Rap'}]
+artist_list = []
 
 heheheha = []
 
-def print_artist(dictionary):
-    for property in dictionary:
-        print(f'{property.capitalize()}: {dictionary[property]}')
+def print_artists(artists):
+    for artist in artists:
+        for property in artist:
+            print(f'{property.capitalize()}: {artist[property]}')
 
 
-def add_artist(dictionary, prompts):
+def add_artist():
+
+    prompts = ['Who is the artist? ', 'What genre is the performance? ', 'How long will the performance go (in 30 minute blocks)? ']
+    sample_artist = {'name': '', 'genre': '', 'performance_duration': 0}
+
     i = 0
-    for property in dictionary:
-        try:
-            dictionary[property] = input(prompts[i])
+    for property in sample_artist:
+        if property != 'performance_duration':
+            sample_artist[property] = input(prompts[i])
             i += 1
-        except:
-            print('Invalid Input')
-            return None
-        
-    artist_list.append(dictionary)
+        else:
+            try:
+                sample_artist[property] = int(input(prompts[i]))
+            except:
+                print('Invalid Input')
+                return None
+            
+    artist_list.append(sample_artist)
 
 def get_artist():
+
+    # Get all lowercase artist names
     artist_names = []
-
     for artist in artist_list:
-        artist_names.append[artist['name'].lower()]
-        print_artist(artist)
+        artist_names.append(artist['name'].lower())
 
-    selected_artist = input('Which artist do you select?').lower()
+    
 
-    # If there is an artist of the name the user inputted, go through every artist again to find that artist, then return that artist.
-    if selected_artist in artist_names:
+    print_artists(artist_list)
 
-        for artist in artist_list:
+    selected_artist = input('Which artist do you select? ').lower()
 
-            if artist['name'] == selected_artist:
-                return artist
-
+    for artist in artist_list:  
+        if artist['name'].lower() == selected_artist:
+            return artist_list.index(artist)
+    
+            
 # Prompts the user to modify a artist by providing them with what they can modify, then modifies that property by how they request
-def modify_artist(dictionary):
+def modify_artist():
+
+    # Get the artist to modify
+    try:
+        artist = artist_list[get_artist()]
+    except:
+        print("Couldn't find artist")
+        return None
     properties = []
 
-    print_artist(dictionary)
-    for property in dictionary:
+    # Get all properties of artists
+    for property in artist:
         properties.append(property)
+
 
     prop_to_mod = input("What property do you want to modify? ").lower()
 
-    if prop_to_mod in properties:
-        try:
-            dictionary[prop_to_mod] = input(f'What do you want to change "{prop_to_mod.capitalize()}" to? ')
-        except:
-            print('Invalid Input')
-            return None
-    
+    # Ask user what they want to change the property to. If the property is the performance duration, convert answer to integer
+    try:
+        if prop_to_mod != "performance_duration":
+            artist[prop_to_mod] = input(f'What do you want to change "{prop_to_mod.capitalize()}" to? ')
+        else:
+            artist[prop_to_mod] = int(input(f'What do you want to change "{prop_to_mod.capitalize()}" to? '))
+    except:
+        print('Invalid Input')
+        return None
+
 # Jonas Fairchild, Venue Management
 
 import os
@@ -228,33 +248,4 @@ def venue_management(): #A sort of sub-main function that contains a user interf
             print("Invalid input. Try again.")
 
 # Matthew McKinley, Time Management
-currentTimes = ()
-currentTimeframes = []
-schedule = []
 
-days = int(input("How many days are you going to have the festival be? :"))
-dayCount = 0
-
-def updateCurrentTimes(timeframes, startTime, endTime):
-    timeframeCount = timeframes
-    timeNow = startTime
-    timeNowHour = startTime
-
-    currentTimes = currentTimes + timeNow
-    currentTimes = currentTimes + timeNowHour
-
-
-    while timeNow <= endTime:
-        remainder = timeframeCount % 2
-        if remainder == 1:
-            timeNowHour = timeNowHour + 1
-        elif remainder == 0:
-            timeNow = timeNow + .30
-
-if days >= dayCount:
-    start = float(input("What time does the performance start? (Minutes are after a decimal point, ex. 10.30)"))
-    end = float(input("What time does the performance end? (Minutes are after a decimal point, ex 12.30)"))
-    timeframes = end - start
-    timeframes = timeframes / 2
-    currentTimeframes = currentTimeframes + timeframes
-    updateCurrentTimes()
