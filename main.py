@@ -5,31 +5,62 @@ def TicketAdd(ticket_list):
     ticket_info = []
     user_questions = ["""What ticket would the customer like?
   Tickets include: 1-day, 3-day, and VIP,
-    --->  ||1-day|1day|1 day:3-day|3day|3 day:vip""", 
-    "What is the customers name?  --->  ||title", 
-    "How old is the customer?  --->  ||digit"]
-    for i in range(len(user_questions)):
+    --->  """, 
+    "What is the customers name?  --->  ", 
+    "How old is the customer?  --->  "]
+    for question in range(len(user_questions)):
         while True:
-            info = input(user_questions[i].split('||')[0])
-            if user_questions[i].split('||')[-1] == 'digit':
-                try: int(info)
-                except:
-                    print('That was not a number, please try again!')
-                    continue
-            elif user_questions[i].split('||')[-1] == 'title':
+            info = input(user_questions[question])
+            if question == 0:
+                if info.lower() in ['1-day','1day','1 day','3-day','3day','3 day','vip']:
+                    if not info == 'vip':
+                        info = f'{info[0]}-day'
+                    break
+            elif question == 1:
                 info = info.title()
-            else:
-                for answerGroup in user_questions[i].split('||')[-1].split(':'):
-                    for answer in answerGroup.split('|'):
-                        if info == answer:
-                            info = answerGroup.split('|')[0]
-                            break # This checks if the user input is equal to a viable answe and beraks not very good, needs to break out of mulriple loops
-            ticket_info.append(info)
-    print(ticket_info)
+                break
+            elif question == 2:
+                if info.isdigit():
+                    break
+            print('\033cError That was not a valid option, please try again!')
+        ticket_info.append(info)
+    ticket_list.append(ticket_info)
+    return ticket_list
 
 # Part of ticket function, Changes an existing ticket in the ticket list
 def TicketChange(ticket_list):
-    pass
+    while True:
+        search1 = input('What name would you like to search for?  --->  ')
+        search2 = input('What age would you like to search for?  --->  ')
+        search_list = []
+        for ticket in ticket_list:
+            if search1.startswith(ticket[1]) or ticket[1].startswith(search1):
+                if search2 == ticket[2]:
+                    search_list.append(ticket)
+        if len(search_list) == 1: # If only one item was found, it tells you.
+            print(f'A {search_list[-1][0]} ticket with the name: {search_list[-1][1]}, age: {search_list[-1][2]} was found. Is this the right ticket?')
+            while True:
+                again = input('(y/n) --->  ')
+                if again.lower() in ['y','n']:
+                    break
+                print('\nNot a valid option.')
+            if again == 'n': break
+        elif len(search_list) >= 2: # If multiple items were would it prints them out and allows you to choose between them
+            print(f'{len(search_list)} tickets have been found.')
+            for ticket in range(len(search_list)):
+                print(f'  {ticket}. {search_list[ticket]}')
+            print('\nWhich ticket seemed correct to you?')
+            correct = input(' (Input a number)  --->  ')
+            # 
+        else: # If no items were found it gives the option to do again
+            print('\033cNothing was found. Would you like to search again?')
+            while True:
+                again = input('(y/n) --->  ')
+                if again.lower() in ['y','n']:
+                    break
+                print('\033cNot a valid option.')
+            if again == 'n': break
+
 
 # Part of ticket function, Removes an existing ticket in the ticket list
 def TicketRemove(ticket_list):
@@ -54,7 +85,8 @@ def TicketUI(ticket_list):
             print('\033cThat was not a valid option please try again!\n')
             continue
         return ticket_list
-TicketUI(1)
+ticket_list = TicketUI([['vip','John Cena','84'],['1-day','Jenna','2'],['3-day','Joshua','23']])
+print(ticket_list)
 
 """
 currentTimes = ()
