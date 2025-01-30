@@ -217,8 +217,6 @@ def venue_management(): #A sort of sub-main function that contains a user interf
             print("That's not an integer. Try again.")
             input("Done reading?: ")
 
-venue_management()
-
 # Matthew McKinley, Time Management
 currentTimes = ()
 currentTimeframes = []
@@ -250,3 +248,38 @@ if days >= dayCount:
     timeframes = timeframes / 2
     currentTimeframes = currentTimeframes + timeframes
     updateCurrentTimes()
+
+#Jonas Fairchild, Master display and Main function
+
+def display_all(): #Uses a combination of display functions from every part of the code to display everything imaginable.
+    print("---------- Artists ----------\n")
+    print("\n---------- Schedule ----------\n")
+    print("\n---------- Venues ----------\n")
+    display_venues()
+    print("\n---------- Tickets/attendees ----------\n")
+
+def main(): #Provides a UI that branches to every part of the program, allowing modification of everything.
+    while True:
+        try:
+            os.system("cls")
+            choice = int(input("What do you want to do?\n1. Manage artists\n2. Manage schedule\n3. Manage venues\n4. Manage ticket sales/attendees\n5. Display everything\n6. Exit program\n"))
+            if choice == 1:
+                pass
+            elif choice == 2:
+                pass
+            elif choice == 3:
+                venues = venue_management()
+            elif choice == 4:
+                pass
+            elif choice == 5:
+               display_all()
+            elif choice == 6:
+                break
+            else:
+                print("That isn't on the list of options. Try again.")
+            input("Done reading?: ")
+        except:
+            print("That's not an integer. Try again.")
+            input("Done reading?: ")
+
+main()
