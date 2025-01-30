@@ -177,14 +177,16 @@ def venue_management(): #A sort of sub-main function that contains a user interf
 currentTimes = ()
 currentTimeframes = []
 schedule = []
+clearTimeframes = []
+unclearTimeframes = []
 
 days = int(input("How many days are you going to have the festival be? :"))
 dayCount = 0
 
-def updateCurrentTimes(timeframes, startTime, endTime):
+def updateCurrentTimes(timeframes, dayStart, endTime, clearTimeframes):
     timeframeCount = timeframes
-    timeNow = startTime
-    timeNowHour = startTime
+    timeNow = dayStart
+    timeNowHour = round(dayStart)
 
     currentTimes = currentTimes + timeNow
     currentTimes = currentTimes + timeNowHour
@@ -195,17 +197,27 @@ def updateCurrentTimes(timeframes, startTime, endTime):
             timeNowHour = timeNowHour + 1
         elif remainder == 0:
             timeNow = timeNow + .30
+    
+    schedule = schedule + timeNow
+    schedule = schedule + timeNowHour
+    schedule = sorted(schedule)
+    clearTimeframes = schedule
+    return clearTimeframes, schedule
+clearTimeframes, schedule = updateCurrentTimes()
 
 if days >= dayCount:
-    dayStart = float(input("What time does the day start? (Minutes are after a decimal point, ex. 10.30)"))
+    dayStart = int(input("What time does the day start? (Make it an hour, no minutes)"))
     dayEnd = float(input("What time does the day end? (Minutes are after a decimal point, ex 12.30)"))
     timeframes = dayEnd - dayStart
     timeframes = timeframes / 2
-    currentTimeframes = currentTimeframes + timeframes
-    updateCurrentTimes()
+    currentTimeframes = currentTimeframes.append(timeframes)
+    updateCurrentTimes(timeframes, dayStart)
 
 def performancesInDay(startTime, endTime):
     performInDay = int(input("How many performances are in this day?"))
-    if performInDay > 0:
+    if performInDay >= 1:
         startTime = float(input("What time do you want the performance to start? (military time with minutes after a decimal, Ex. 16.30 is 4:30 PM)"))
         endTime = float(input("What time do you want the performance to end? (military time with minutes after a decimal, Ex. 16.30 is 4:30 PM)"))
+        performTime = startTime 
+        if performTime in clearTimeframes:
+            unclearTimeframes = unclearTimeframes.append(performTime)
