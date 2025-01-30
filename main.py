@@ -1,5 +1,43 @@
 #Music Festival Management System
 
+# Darius Vaiaoga, Artist Management
+artist_list = [{'name': 'Eminem', 'genre': 'Rap'}]
+
+heheheha = []
+
+def print_artist(dictionary):
+    for property in dictionary:
+        print(f'{property.capitalize()}: {dictionary[property]}')
+
+def add_artist(dictionary, target_list, prompts):
+    i = 0
+    for property in dictionary:
+        try:
+            dictionary[property] = input(prompts[i])
+            i += 1
+        except:
+            print('Invalid Input')
+            return None
+        
+    target_list.append(dictionary)
+
+# Prompts the user to modify a dictionary by providing them with what they can modify, then
+def modify_artist(dictionary):
+    properties = []
+
+    print_artist(dictionary)
+    for property in dictionary:
+        properties.append(property)
+
+    prop_to_mod = input("What property do you want to modify? ").lower()
+
+    if prop_to_mod in properties:
+        try:
+            dictionary[prop_to_mod] = input(f'What do you want to change "{prop_to_mod.capitalize()}" to? ')
+        except:
+            print('Invalid Input')
+            return None
+    
 #Jonas Fairchild, Venue Management
 
 import os
@@ -181,21 +219,34 @@ def venue_management(): #A sort of sub-main function that contains a user interf
 
 venue_management()
 
-# Tuple of times of in standard notation
+# Matthew McKinley, Time Management
 currentTimes = ()
 currentTimeframes = []
+schedule = []
 
-schedule = ()
+days = int(input("How many days are you going to have the festival be? :"))
+dayCount = 0
 
-def updateCurrentTimes():
-    pass
-artist_list = [{'name': 'Eminem', 'genre': 'Rap', 'start': schedule[9], 'end': 11.30}]
+def updateCurrentTimes(timeframes, startTime, endTime):
+    timeframeCount = timeframes
+    timeNow = startTime
+    timeNowHour = startTime
 
-days = int(input("How many days are you going to have the festival be?:"))
+    currentTimes = currentTimes + timeNow
+    currentTimes = currentTimes + timeNowHour
 
-def ListArtists():
-    for artist in artist_list:
-        print(f'Name: {artist["name"]}')
-        print(f'Genre: {artist["genre"]}')
 
-ListArtists()
+    while timeNow <= endTime:
+        remainder = timeframeCount % 2
+        if remainder == 1:
+            timeNowHour = timeNowHour + 1
+        elif remainder == 0:
+            timeNow = timeNow + .30
+
+if days >= dayCount:
+    start = float(input("What time does the performance start? (Minutes are after a decimal point, ex. 10.30)"))
+    end = float(input("What time does the performance end? (Minutes are after a decimal point, ex 12.30)"))
+    timeframes = end - start
+    timeframes = timeframes / 2
+    currentTimeframes = currentTimeframes + timeframes
+    updateCurrentTimes()

@@ -1,0 +1,40 @@
+Current times is a tuple
+Current timeframes is a list
+
+Days is equivalent to the user inputting an integer of how many days will the festival be?
+
+Define the function of update current times
+	Timeframe count is equivalent to timeframes
+	Time now is equivalent to start time (countable variable pt 2)
+	Time now hour is equivalent to start time (countable variable p3)
+	Current times is equivalent to current times + time now
+	Current times is equivalent to current times + time now hour
+	While time now is less than or equal to end time
+		Remainder is equivalent to timeframe count % 2
+		If remainder is equivalent to 1
+			Time now hour is equivalent to time now hour + 1
+		Else if remainder is equivalent to 0
+			Time now is equivalent to time now + .30
+
+If the number of days is greater than or equal to the current count
+	Ask the user for the start time of that day
+	Ask the user for the end time of that day
+	Timeframes is equivalent to end time minus start time, divided by 2.
+	Update current timeframes to have these timeframes
+	Run the function of starting current times
+	Ask the user for how many performances there will be in that day
+
+Define the function of performance in day
+If there is another performance in the number of performances there will be in the day
+	Ask the user what time they want the performance to start (military time (minutes are decimal)
+Ask the user what time they want the performance to end (military time (minutes are decimal)
+	
+		If that performance time is clear
+Make it so that the timeframe is not available anymore, also add 1 more timeframe as an intermission
+			Update current times
+		Else if the performance time is not clear
+			Tell the user that that performance time is not clear
+				Run the function of performance in day
+
+
+
