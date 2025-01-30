@@ -1,6 +1,7 @@
 #Music Festival Management System
 
 # Darius Vaiaoga, Artist Management
+
 artist_list = [{'name': 'Eminem', 'genre': 'Rap'}]
 
 heheheha = []
@@ -9,7 +10,8 @@ def print_artist(dictionary):
     for property in dictionary:
         print(f'{property.capitalize()}: {dictionary[property]}')
 
-def add_artist(dictionary, target_list, prompts):
+
+def add_artist(dictionary, prompts):
     i = 0
     for property in dictionary:
         try:
@@ -19,9 +21,26 @@ def add_artist(dictionary, target_list, prompts):
             print('Invalid Input')
             return None
         
-    target_list.append(dictionary)
+    artist_list.append(dictionary)
 
-# Prompts the user to modify a dictionary by providing them with what they can modify, then
+def get_artist():
+    artist_names = []
+
+    for artist in artist_list:
+        artist_names.append[artist['name'].lower()]
+        print_artist(artist)
+
+    selected_artist = input('Which artist do you select?').lower()
+
+    # If there is an artist of the name the user inputted, go through every artist again to find that artist, then return that artist.
+    if selected_artist in artist_names:
+
+        for artist in artist_list:
+
+            if artist['name'] == selected_artist:
+                return artist
+
+# Prompts the user to modify a artist by providing them with what they can modify, then modifies that property by how they request
 def modify_artist(dictionary):
     properties = []
 
@@ -38,7 +57,7 @@ def modify_artist(dictionary):
             print('Invalid Input')
             return None
     
-#Jonas Fairchild, Venue Management
+# Jonas Fairchild, Venue Management
 
 import os
 venues = []
@@ -156,7 +175,7 @@ def equipment_modify(): #Handles the modification for the equipment lists for ea
                 print("That stage isn't on the list.")
             else:
                 print("There is no equipment to remove.")
-
+  
         elif choice == "add": #Handles the adding of equipment
             equipment_name = input("What is the name of your equipment?: ")
             while True:
