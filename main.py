@@ -1,44 +1,81 @@
 #Music Festival Management System
 
 # Darius Vaiaoga, Artist Management
-artist_list = [{'name': 'Eminem', 'genre': 'Rap'}]
 
-heheheha = []
+artist_list = []
 
-def print_artist(dictionary):
-    for property in dictionary:
-        print(f'{property.capitalize()}: {dictionary[property]}')
+def print_artists(artists):
+    for artist in artists:
+        for property in artist:
+            print(f'{property.capitalize()}: {artist[property]}')
 
-def add_artist(dictionary, target_list, prompts):
+
+def add_artist():
+
+    prompts = ['Who is the artist? ', 'What genre is the performance? ', 'How long will the performance go (in 30 minute blocks)? ']
+    sample_artist = {'name': '', 'genre': '', 'performance_duration': 0}
+
     i = 0
-    for property in dictionary:
-        try:
-            dictionary[property] = input(prompts[i])
+    for property in sample_artist:
+        if property != 'performance_duration':
+            sample_artist[property] = input(prompts[i])
             i += 1
-        except:
-            print('Invalid Input')
-            return None
-        
-    target_list.append(dictionary)
+        else:
+            try:
+                sample_artist[property] = int(input(prompts[i]))
+            except:
+                print('Invalid Input')
+                return None
+            
+    artist_list.append(sample_artist)
 
-# Prompts the user to modify a dictionary by providing them with what they can modify, then
-def modify_artist(dictionary):
+def get_artist():
+
+    # Get all lowercase artist names
+    artist_names = []
+    for artist in artist_list:
+        artist_names.append(artist['name'].lower())
+
+    
+
+    print_artists(artist_list)
+
+    selected_artist = input('Which artist do you select? ').lower()
+
+    for artist in artist_list:  
+        if artist['name'].lower() == selected_artist:
+            return artist_list.index(artist)
+    
+            
+# Prompts the user to modify a artist by providing them with what they can modify, then modifies that property by how they request
+def modify_artist():
+
+    # Get the artist to modify
+    try:
+        artist = artist_list[get_artist()]
+    except:
+        print("Couldn't find artist")
+        return None
     properties = []
 
-    print_artist(dictionary)
-    for property in dictionary:
+    # Get all properties of artists
+    for property in artist:
         properties.append(property)
+
 
     prop_to_mod = input("What property do you want to modify? ").lower()
 
-    if prop_to_mod in properties:
-        try:
-            dictionary[prop_to_mod] = input(f'What do you want to change "{prop_to_mod.capitalize()}" to? ')
-        except:
-            print('Invalid Input')
-            return None
-    
-#Jonas Fairchild, Venue Management
+    # Ask user what they want to change the property to. If the property is the performance duration, convert answer to integer
+    try:
+        if prop_to_mod != "performance_duration":
+            artist[prop_to_mod] = input(f'What do you want to change "{prop_to_mod.capitalize()}" to? ')
+        else:
+            artist[prop_to_mod] = int(input(f'What do you want to change "{prop_to_mod.capitalize()}" to? '))
+    except:
+        print('Invalid Input')
+        return None
+
+# Jonas Fairchild, Venue Management
 
 import os
 venues = []
@@ -156,7 +193,7 @@ def equipment_modify(): #Handles the modification for the equipment lists for ea
                 print("That stage isn't on the list.")
             else:
                 print("There is no equipment to remove.")
-
+  
         elif choice == "add": #Handles the adding of equipment
             equipment_name = input("What is the name of your equipment?: ")
             while True:
@@ -218,6 +255,7 @@ def venue_management(): #A sort of sub-main function that contains a user interf
             input("Done reading?: ")
 
 # Matthew McKinley, Time Management
+
 currentTimes = ()
 currentTimeframes = []
 schedule = []
