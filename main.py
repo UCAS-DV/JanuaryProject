@@ -12,13 +12,12 @@ def print_artists():
                 print(f'{property.capitalize()}: {artist[property]}')
     else:
         input('Sorry, there seems to be no artists!')
-        return None
 
 
 def add_artist():
 
     prompts = ['Who is the artist? ', 'What genre is the performance? ', 'How long will the performance go (in 30 minute blocks)? ']
-    sample_artist = {'name': '', 'genre': '', 'performance_duration': 0}
+    sample_artist = {'name': '', 'genre': ''}
 
     i = 0
     for property in sample_artist:
@@ -45,12 +44,16 @@ def get_artist():
 
     selected_artist = input('Which artist do you select? ').lower()
 
-    for artist in artist_list:  
-        if artist['name'].lower() == selected_artist:
-            return artist_list.index(artist)
+    if selected_artist in artist_names:
+        for artist in artist_list:  
+            if artist['name'].lower() == selected_artist:
+                return artist_list.index(artist)
     
 def remove_artist():
-    artist_list.pop(artist_list[get_artist()])
+    try:
+        artist_list.pop(artist_list[get_artist()])
+    except:
+        input("Couldn't find artist")
 
             
 # Prompts the user to modify a artist by providing them with what they can modify, then modifies that property by how they request
@@ -279,7 +282,9 @@ dayCount = 0
 # Prints out filled time frames with the performances happening then 
 def print_timetable():
     for timeFrame in unclearTimeframes:
-        print(f'{timeFrame} - {performances[unclearTimeframes.index(timeFrame)]}')
+        performance = performances[unclearTimeframes.index(timeFrame)]
+
+        print(f"{timeFrame} - {performance['Artist']['name']}'s {performance['Artist']['genre']} performance")
 
 def update_current_times(timeframes, startTime, endTime):
     timeframeCount = timeframes
@@ -301,7 +306,6 @@ def update_current_times(timeframes, startTime, endTime):
     schedule = sorted(schedule)
     clearTimeframes = schedule
     return clearTimeframes, schedule
-clearTimeframes, schedule = update_current_times()
 
 def modify_festival_length():
     if days >= dayCount:
@@ -314,50 +318,39 @@ def modify_festival_length():
 
 def performancesInDay(startTime, endTime):
     performInDay = int(input("How many performances are in this day?"))
+
+    sample_performance = {'Artist': {}, 'Start Time': 1.30, 'End Time': 2.30}
+
     while performInDay >= 1:
+        
+        try:
+            sample_performance['Artist'] = artist_list[get_artist()]
+        except:
+            input("Couldn't find artist")
+            break
+
         startTime = float(input("What time do you want the performance to start? (military time with minutes after a decimal, Ex. 16.30 is 4:30 PM)"))
         endTime = float(input("What time do you want the performance to end? (military time with minutes after a decimal, Ex. 16.30 is 4:30 PM)"))
         nowTime = startTime
+
+        sample_performance['Start Time'] = startTime
+        sample_performance['End Time'] = endTime
+
         if nowTime in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]:
             clearTimeframes.remove(nowTime)
             unclearTimeframes.append(nowTime)
             nowTime = nowTime + .30
             if nowTime == endTime:
-                pass #maybe? idk if I need something here
+                continue
         elif nowTime in [1.30, 2.30, 3.30, 4.30, 5.30, 6.30, 7.30, 8.30, 9.30, 10.30, 11.30, 12.30, 13.30, 14.30, 15.30, 16.30, 17.30, 18.30, 19.30, 20.30, 21.30, 22.30, 23.30]:
             clearTimeframes.remove(nowTime)
             unclearTimeframes.append(nowTime)
             nowTime = round(nowTime)
             nowTime = nowTime + 1
         performInDay -= 1
-            
-def modify_performance_length():
-    if days >= dayCount:
 
-        start = float(input("What time does the performance start? (Minutes are after a decimal point, ex. 10.30)"))
-        end = float(input("What time does the performance end? (Minutes are after a decimal point, ex 12.30)"))
-        timeframes = end - start
-        timeframes = timeframes / 2
-        currentTimeframes = currentTimeframes + timeframes
 
-def time_menu():
-    while True:
-        os.system('cls')
-        print('"---------- Time ----------')
-        match input('What do you want to do with time? \n1. Modify Fesitval Length \n2. Modify Performance Length \n3. Remove Artist \n4. Modify Artist \n6. Go Back \n'):
-            case '1':
-                modify_festival_length()
-            case '2':
-                add_artist()
-            case '3':
-                remove_artist()
-            case '4':
-                modify_artist()
-            case '6':
-                main()
-                break
-            case _:
-                input('Invalid Input')
+
 
 
 #Jonas Fairchild, Master display and Main function
@@ -369,6 +362,23 @@ def display_all(): #Uses a combination of display functions from every part of t
     print("\n---------- Venues ----------\n")
     display_venues()
     print("\n---------- Tickets/attendees ----------\n")
+
+def time_menu():
+    while True:
+        os.system('cls')
+        print('"---------- Time ----------')
+        match input('What do you want to do with time? \nSee Time Table \n2. Modify Festival Hours \n3. Set Performances \n6.'):
+            case '1':
+                print_timetable()
+            case '2':
+                modify_festival_length()
+            case '3':
+                performancesInDay()
+            case '6':
+                main()
+                break
+            case _:
+                input('Invalid Input')
 
 def artist_menu():
     while True:
@@ -396,9 +406,8 @@ def main(): #Provides a UI that branches to every part of the program, allowing 
         choice = input("What do you want to do?\n1. Manage artists\n2. Manage schedule\n3. Manage venues\n4. Manage ticket sales/attendees\n5. Display everything\n6. Exit program\n")
         if choice == '1':
             artist_menu()
-            break
         elif choice == '2':
-            pass
+            time_menu()
         elif choice == '3':
             venues = venue_management()
         elif choice == '4':
