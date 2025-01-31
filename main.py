@@ -41,18 +41,18 @@ def get_artist():
                 return artist
 
 # Prompts the user to modify a artist by providing them with what they can modify, then modifies that property by how they request
-def modify_artist(dictionary):
+def modify_artist(artist):
     properties = []
 
-    print_artist(dictionary)
-    for property in dictionary:
+    print_artist(artist)
+    for property in artist:
         properties.append(property)
 
     prop_to_mod = input("What property do you want to modify? ").lower()
 
     if prop_to_mod in properties:
         try:
-            dictionary[prop_to_mod] = input(f'What do you want to change "{prop_to_mod.capitalize()}" to? ')
+            artist[prop_to_mod] = input(f'What do you want to change "{prop_to_mod.capitalize()}" to? ')
         except:
             print('Invalid Input')
             return None
