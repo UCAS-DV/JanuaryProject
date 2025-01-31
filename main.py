@@ -13,7 +13,6 @@ def print_artists():
     else:
         input('Sorry, there seems to be no artists!')
 
-
 def add_artist():
 
     prompts = ['Who is the artist? ', 'What genre is the performance? ', 'How long will the performance go (in 30 minute blocks)? ']
@@ -49,13 +48,13 @@ def get_artist():
             if artist['name'].lower() == selected_artist:
                 return artist_list.index(artist)
     
-def remove_arist():
-    artist_list.remove(get_artist())
+def remove_artist():
+    artist_list.remove(artist_list[get_artist()])
 
             
 # Prompts the user to modify a artist by providing them with what they can modify, then modifies that property by how they request
 def modify_artist():
-
+    
     # Get the artist to modify
     try:
         artist = artist_list[get_artist()]
@@ -386,7 +385,7 @@ def artist_menu():
             case '2':
                 add_artist()
             case '3':
-                remove_arist()
+                remove_artist()
             case '4':
                 modify_artist()
             case '6':
