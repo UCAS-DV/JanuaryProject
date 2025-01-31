@@ -10,8 +10,8 @@ def print_artists():
             for property in artist:
                 print(f'{property.capitalize()}: {artist[property]}')
     else:
-        input('Sorry, there seems to be no artists!')
-        return None
+        print('Sorry, there seems to be no artists!')
+
 
 
 def add_artist():
@@ -49,36 +49,59 @@ def get_artist():
             return artist_list.index(artist)
     
 def remove_artist():
-    artist_list.pop(artist_list[get_artist()])
+    if artist_list:
+        artist_list.pop(artist_list[get_artist()])
+    else:
+        print("Sorry, there seems to be no artists!")
 
             
 # Prompts the user to modify a artist by providing them with what they can modify, then modifies that property by how they request
 def modify_artist():
+    if artist_list:
+        # Get the artist to modify
+        try:
+            artist = artist_list[get_artist()]
+        except:
+            print("Couldn't find artist.")
+            return None
+        properties = []
 
-    # Get the artist to modify
-    try:
-        artist = artist_list[get_artist()]
-    except:
-        input("Couldn't find artist")
-        return None
-    properties = []
-
-    # Get all properties of artists
-    for property in artist:
-        properties.append(property)
+        # Get all properties of artists
+        for property in artist:
+            properties.append(property)
 
 
-    prop_to_mod = input("What property do you want to modify? ").lower()
+        prop_to_mod = input("What property do you want to modify? ").lower()
 
-    # Ask user what they want to change the property to. If the property is the performance duration, convert answer to integer
-    try:
-        if prop_to_mod != "performance_duration":
-            artist[prop_to_mod] = input(f'What do you want to change "{prop_to_mod.capitalize()}" to? ')
-        else:
-            artist[prop_to_mod] = int(input(f'What do you want to change "{prop_to_mod.capitalize()}" to? '))
-    except:
-        input('Invalid Input')
-        return None
+        # Ask user what they want to change the property to. If the property is the performance duration, convert answer to integer
+        try:
+            if prop_to_mod != "performance_duration":
+                artist[prop_to_mod] = input(f'What do you want to change "{prop_to_mod.capitalize()}" to? ')
+            else:
+                artist[prop_to_mod] = int(input(f'What do you want to change "{prop_to_mod.capitalize()}" to? '))
+        except:
+            input('Invalid Input')
+            return None
+    else:
+        print("Sorry, there seems to be no artists!")
+
+def time_menu():
+    while True:
+        os.system('cls')
+        match input('What do you want to do with the schedule? \n1. Modify Fesitval Length \n2. Modify Performance Length \n3. Remove Artist \n4. Modify Artist \n6. Go Back \n'):
+            case '1':
+                modify_festival_length()
+            case '2':
+                add_artist()
+            case '3':
+                remove_artist()
+            case '4':
+                modify_artist()
+            case '6':
+                break
+            case _:
+                print('Invalid Input. Try again.')
+        input("Done reading?: ")
 
 # Jonas Fairchild, Venue Management
 
@@ -339,41 +362,11 @@ def modify_performance_length(currentTimeframes):
         timeframes = timeframes / 2
         currentTimeframes = currentTimeframes + timeframes
 
-def time_menu():
-    while True:
-        os.system('cls')
-        print('"---------- Time ----------')
-        match input('What do you want to do with time? \n1. Modify Festival Length \n2. Modify Performance Length \n3. Remove Artist \n4. Modify Artist \n6. Go Back \n'):
-            case '1':
-                modify_festival_length(currentTimeframes)
-            case '2':
-                add_artist()
-            case '3':
-                remove_artist()
-            case '4':
-                modify_artist()
-            case '6':
-                main()
-                break
-            case _:
-                input('Invalid Input')
-
-
-#Jonas Fairchild, Master display and Main function
-
-def display_all(): #Uses a combination of display functions from every part of the code to display everything imaginable.
-    print("---------- Artists ----------\n")
-    print_artists()
-    print("\n---------- Schedule ----------\n")
-    print("\n---------- Venues ----------\n")
-    display_venues()
-    print("\n---------- Tickets/attendees ----------\n")
-
 def artist_menu():
     while True:
         os.system('cls')
-        print('"---------- Artists ----------')
-        match input('What do you want to do with the artists? \n1. See Artists \n2. Add Artist \n3. Remove Artist \n4. Modify Artist \n6. Go Back \n'):
+
+        match input('What do you want to do with artist management? \n1. See Artists \n2. Add Artist \n3. Remove Artist \n4. Modify Artist \n6. Go Back \n'):
             case '1':
                 print_artists()
             case '2':
@@ -383,11 +376,20 @@ def artist_menu():
             case '4':
                 modify_artist()
             case '6':
-                main()
                 break
             case _:
-                input('Invalid Input')
-                
+                print('Invalid Input. Try again.')
+        input("Done reading?: ")
+
+#Jonas Fairchild, Master display and Main function
+
+def display_all(): #Uses a combination of display functions from every part of the code to display everything imaginable.
+    print("---------- Artists ----------\n")
+    print_artists()
+    print("\n---------- Schedule ----------\n")
+    print("\n---------- Venues ----------\n")
+    display_venues()
+    print("\n---------- Tickets/attendees ----------\n")                
 
 def main(): #Provides a UI that branches to every part of the program, allowing modification of everything.
     while True:
@@ -395,9 +397,8 @@ def main(): #Provides a UI that branches to every part of the program, allowing 
         choice = input("What do you want to do?\n1. Manage artists\n2. Manage schedule\n3. Manage venues\n4. Manage ticket sales/attendees\n5. Display everything\n6. Exit program\n")
         if choice == '1':
             artist_menu()
-            break
         elif choice == '2':
-            time_menu()
+            pass
         elif choice == '3':
             venues = venue_management()
         elif choice == '4':
@@ -408,6 +409,6 @@ def main(): #Provides a UI that branches to every part of the program, allowing 
             break
         else:
             print("That isn't on the list of options. Try again.")
+        input("Done reading?: ")
 
 main()
-
