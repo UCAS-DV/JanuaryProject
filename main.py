@@ -166,6 +166,7 @@ def TicketUI(ticket_list):
             print('\033cThat was not a valid option please try again!\n')
             continue
         return ticket_list # returns ticket list to main function for usage later
+# comment delete later
 """
 currentTimes = ()
 currentTimeframes = []
