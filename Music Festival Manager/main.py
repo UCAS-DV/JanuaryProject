@@ -266,17 +266,24 @@ def venue_management(): #A sort of sub-main function that contains a user interf
 currentTimes = ()
 currentTimeframes = []
 schedule = []
+
 clearTimeframes = []
+
 unclearTimeframes = []
+performances = []
 
 days = 0
 dayCount = 0
 
+# Prints out filled time frames with the performances happening then 
+def print_timetable():
+    for timeFrame in unclearTimeframes:
+        print(f'{timeFrame} - {performances[unclearTimeframes.index(timeFrame)]}')
 
 def update_current_times(timeframes, startTime, endTime):
     timeframeCount = timeframes
-    timeNow = dayStart
-    timeNowHour = round(dayStart)
+    timeNow = startTime
+    timeNowHour = round(startTime)
 
     currentTimes = currentTimes + timeNow
     currentTimes = currentTimes + timeNowHour
@@ -302,11 +309,11 @@ def modify_festival_length():
         timeframes = dayEnd - dayStart
         timeframes = timeframes / 2
         currentTimeframes = currentTimeframes.append(timeframes)
-        update_current_times(timeframes, dayStart)
+        update_current_times(timeframes, dayStart, dayEnd)
 
 def performancesInDay(startTime, endTime):
     performInDay = int(input("How many performances are in this day?"))
-    if performInDay >= 1:
+    while performInDay >= 1:
         startTime = float(input("What time do you want the performance to start? (military time with minutes after a decimal, Ex. 16.30 is 4:30 PM)"))
         endTime = float(input("What time do you want the performance to end? (military time with minutes after a decimal, Ex. 16.30 is 4:30 PM)"))
         nowTime = startTime
@@ -321,9 +328,11 @@ def performancesInDay(startTime, endTime):
             unclearTimeframes.append(nowTime)
             nowTime = round(nowTime)
             nowTime = nowTime + 1
+        performInDay -= 1
             
 def modify_performance_length():
     if days >= dayCount:
+
         start = float(input("What time does the performance start? (Minutes are after a decimal point, ex. 10.30)"))
         end = float(input("What time does the performance end? (Minutes are after a decimal point, ex 12.30)"))
         timeframes = end - start
@@ -333,10 +342,10 @@ def modify_performance_length():
 def time_menu():
     while True:
         os.system('cls')
-        print('"---------- Artists ----------')
-        match input('What do you want to do with the artists? \n1. See Artists \n2. Add Artist \n3. Remove Artist \n4. Modify Artist \n6. Go Back \n'):
+        print('"---------- Time ----------')
+        match input('What do you want to do with time? \n1. Modify Fesitval Length \n2. Modify Performance Length \n3. Remove Artist \n4. Modify Artist \n6. Go Back \n'):
             case '1':
-                print_artists()
+                modify_festival_length()
             case '2':
                 add_artist()
             case '3':
