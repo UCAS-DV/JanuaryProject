@@ -4,10 +4,14 @@
 
 artist_list = []
 
-def print_artists(artists):
-    for artist in artists:
-        for property in artist:
-            print(f'{property.capitalize()}: {artist[property]}')
+def print_artists():
+    if artist_list != []:
+        for artist in artist_list:
+            for property in artist:
+                print(f'{property.capitalize()}: {artist[property]}')
+    else:
+        input('Sorry, there seems to be no artists!')
+        return None
 
 
 def add_artist():
@@ -24,7 +28,7 @@ def add_artist():
             try:
                 sample_artist[property] = int(input(prompts[i]))
             except:
-                print('Invalid Input')
+                input('Invalid Input')
                 return None
             
     artist_list.append(sample_artist)
@@ -36,9 +40,7 @@ def get_artist():
     for artist in artist_list:
         artist_names.append(artist['name'].lower())
 
-    
-
-    print_artists(artist_list)
+    print_artists()
 
     selected_artist = input('Which artist do you select? ').lower()
 
@@ -46,6 +48,9 @@ def get_artist():
         if artist['name'].lower() == selected_artist:
             return artist_list.index(artist)
     
+def remove_artist():
+    artist_list.pop(artist_list[get_artist()])
+
             
 # Prompts the user to modify a artist by providing them with what they can modify, then modifies that property by how they request
 def modify_artist():
@@ -54,7 +59,7 @@ def modify_artist():
     try:
         artist = artist_list[get_artist()]
     except:
-        print("Couldn't find artist")
+        input("Couldn't find artist")
         return None
     properties = []
 
@@ -72,7 +77,7 @@ def modify_artist():
         else:
             artist[prop_to_mod] = int(input(f'What do you want to change "{prop_to_mod.capitalize()}" to? '))
     except:
-        print('Invalid Input')
+        input('Invalid Input')
         return None
 
 # Jonas Fairchild, Venue Management
@@ -260,10 +265,10 @@ currentTimes = ()
 currentTimeframes = []
 schedule = []
 
-days = int(input("How many days are you going to have the festival be? :"))
+days = 0
 dayCount = 0
 
-def updateCurrentTimes(timeframes, startTime, endTime):
+def update_current_times(timeframes, startTime, endTime):
     timeframeCount = timeframes
     timeNow = startTime
     timeNowHour = startTime
@@ -279,45 +284,88 @@ def updateCurrentTimes(timeframes, startTime, endTime):
         elif remainder == 0:
             timeNow = timeNow + .30
 
-if days >= dayCount:
-    start = float(input("What time does the performance start? (Minutes are after a decimal point, ex. 10.30)"))
-    end = float(input("What time does the performance end? (Minutes are after a decimal point, ex 12.30)"))
-    timeframes = end - start
-    timeframes = timeframes / 2
-    currentTimeframes = currentTimeframes + timeframes
-    updateCurrentTimes()
+def modify_performance_length():
+    if days >= dayCount:
+        start = float(input("What time does the performance start? (Minutes are after a decimal point, ex. 10.30)"))
+        end = float(input("What time does the performance end? (Minutes are after a decimal point, ex 12.30)"))
+        timeframes = end - start
+        timeframes = timeframes / 2
+        currentTimeframes = currentTimeframes + timeframes
+
+def modify_festival_length():
+    try:
+        days = int(input('How many days will the fesitval last? '))
+    except:
+        input('Invalid Input')
+
+def time_menu():
+    while True:
+        os.system('cls')
+        print('"---------- Artists ----------')
+        match input('What do you want to do with the artists? \n1. See Artists \n2. Add Artist \n3. Remove Artist \n4. Modify Artist \n6. Go Back \n'):
+            case '1':
+                print_artists()
+            case '2':
+                add_artist()
+            case '3':
+                remove_artist()
+            case '4':
+                modify_artist()
+            case '6':
+                main()
+                break
+            case _:
+                input('Invalid Input')
+
 
 #Jonas Fairchild, Master display and Main function
 
 def display_all(): #Uses a combination of display functions from every part of the code to display everything imaginable.
     print("---------- Artists ----------\n")
+    print_artists()
     print("\n---------- Schedule ----------\n")
     print("\n---------- Venues ----------\n")
     display_venues()
     print("\n---------- Tickets/attendees ----------\n")
 
+def artist_menu():
+    while True:
+        os.system('cls')
+        print('"---------- Artists ----------')
+        match input('What do you want to do with the artists? \n1. See Artists \n2. Add Artist \n3. Remove Artist \n4. Modify Artist \n6. Go Back \n'):
+            case '1':
+                print_artists()
+            case '2':
+                add_artist()
+            case '3':
+                remove_artist()
+            case '4':
+                modify_artist()
+            case '6':
+                main()
+                break
+            case _:
+                input('Invalid Input')
+                
+
 def main(): #Provides a UI that branches to every part of the program, allowing modification of everything.
     while True:
-        try:
-            os.system("cls")
-            choice = int(input("What do you want to do?\n1. Manage artists\n2. Manage schedule\n3. Manage venues\n4. Manage ticket sales/attendees\n5. Display everything\n6. Exit program\n"))
-            if choice == 1:
-                pass
-            elif choice == 2:
-                pass
-            elif choice == 3:
-                venues = venue_management()
-            elif choice == 4:
-                pass
-            elif choice == 5:
-               display_all()
-            elif choice == 6:
-                break
-            else:
-                print("That isn't on the list of options. Try again.")
-            input("Done reading?: ")
-        except:
-            print("That's not an integer. Try again.")
-            input("Done reading?: ")
+        os.system("cls")
+        choice = input("What do you want to do?\n1. Manage artists\n2. Manage schedule\n3. Manage venues\n4. Manage ticket sales/attendees\n5. Display everything\n6. Exit program\n")
+        if choice == '1':
+            artist_menu()
+            break
+        elif choice == '2':
+            pass
+        elif choice == '3':
+            venues = venue_management()
+        elif choice == '4':
+            pass
+        elif choice == '5':
+            display_all()
+        elif choice == '6':
+            break
+        else:
+            print("That isn't on the list of options. Try again.")
 
 main()
