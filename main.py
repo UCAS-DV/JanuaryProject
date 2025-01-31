@@ -49,11 +49,8 @@ def get_artist():
             if artist['name'].lower() == selected_artist:
                 return artist_list.index(artist)
     
-def remove_artist():
-    try:
-        artist_list.pop(artist_list[get_artist()])
-    except:
-        input("Couldn't find artist")
+def remove_arist():
+    artist_list.remove(get_artist())
 
             
 # Prompts the user to modify a artist by providing them with what they can modify, then modifies that property by how they request
@@ -71,8 +68,11 @@ def modify_artist():
     for property in artist:
         properties.append(property)
 
-
     prop_to_mod = input("What property do you want to modify? ").lower()
+
+    if prop_to_mod != 'name' or 'genre':
+        input("That property doesn't exist")
+        return None
 
     # Ask user what they want to change the property to. If the property is the performance duration, convert answer to integer
     try:
@@ -349,10 +349,6 @@ def performancesInDay(startTime, endTime):
             nowTime = nowTime + 1
         performInDay -= 1
 
-
-
-
-
 #Jonas Fairchild, Master display and Main function
 
 def display_all(): #Uses a combination of display functions from every part of the code to display everything imaginable.
@@ -390,7 +386,7 @@ def artist_menu():
             case '2':
                 add_artist()
             case '3':
-                remove_artist()
+                remove_arist()
             case '4':
                 modify_artist()
             case '6':
