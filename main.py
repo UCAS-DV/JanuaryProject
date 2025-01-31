@@ -259,23 +259,27 @@ def venue_management(): #A sort of sub-main function that contains a user interf
             print("That's not an integer. Try again.")
             input("Done reading?: ")
 
+
 # Matthew McKinley, Time Management
+
 
 currentTimes = ()
 currentTimeframes = []
 schedule = []
+clearTimeframes = []
+unclearTimeframes = []
 
 days = 0
 dayCount = 0
 
+
 def update_current_times(timeframes, startTime, endTime):
     timeframeCount = timeframes
-    timeNow = startTime
-    timeNowHour = startTime
+    timeNow = dayStart
+    timeNowHour = round(dayStart)
 
     currentTimes = currentTimes + timeNow
     currentTimes = currentTimes + timeNowHour
-
 
     while timeNow <= endTime:
         remainder = timeframeCount % 2
@@ -283,20 +287,39 @@ def update_current_times(timeframes, startTime, endTime):
             timeNowHour = timeNowHour + 1
         elif remainder == 0:
             timeNow = timeNow + .30
+    
+    schedule = schedule + timeNow
+    schedule = schedule + timeNowHour
+    schedule = sorted(schedule)
+    clearTimeframes = schedule
+    return clearTimeframes, schedule
+clearTimeframes, schedule = updateCurrentTimes()
 
+def modify_festival_length():
+    if days >= dayCount:
+        dayStart = int(input("What time does the day start? (Make it an hour, no minutes)"))
+        dayEnd = float(input("What time does the day end? (Minutes are after a decimal point, ex 12.30)"))
+        timeframes = dayEnd - dayStart
+        timeframes = timeframes / 2
+        currentTimeframes = currentTimeframes.append(timeframes)
+        updateCurrentTimes(timeframes, dayStart)
+
+def performancesInDay(startTime, endTime):
+    performInDay = int(input("How many performances are in this day?"))
+    if performInDay >= 1:
+        startTime = float(input("What time do you want the performance to start? (military time with minutes after a decimal, Ex. 16.30 is 4:30 PM)"))
+        endTime = float(input("What time do you want the performance to end? (military time with minutes after a decimal, Ex. 16.30 is 4:30 PM)"))
+        performTime = startTime 
+        if performTime in clearTimeframes:
+            unclearTimeframes = unclearTimeframes.append(performTime)
+            
 def modify_performance_length():
     if days >= dayCount:
         start = float(input("What time does the performance start? (Minutes are after a decimal point, ex. 10.30)"))
         end = float(input("What time does the performance end? (Minutes are after a decimal point, ex 12.30)"))
         timeframes = end - start
         timeframes = timeframes / 2
-        currentTimeframes = currentTimeframes + timeframes
-
-def modify_festival_length():
-    try:
-        days = int(input('How many days will the fesitval last? '))
-    except:
-        input('Invalid Input')
+        currentTimeframes = currentTimeframes + timeframe
 
 def time_menu():
     while True:
@@ -369,3 +392,4 @@ def main(): #Provides a UI that branches to every part of the program, allowing 
             print("That isn't on the list of options. Try again.")
 
 main()
+
