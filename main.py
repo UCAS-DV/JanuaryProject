@@ -293,7 +293,7 @@ def update_current_times(timeframes, startTime, endTime):
     schedule = sorted(schedule)
     clearTimeframes = schedule
     return clearTimeframes, schedule
-clearTimeframes, schedule = updateCurrentTimes()
+clearTimeframes, schedule = update_current_times()
 
 def modify_festival_length():
     if days >= dayCount:
@@ -302,16 +302,25 @@ def modify_festival_length():
         timeframes = dayEnd - dayStart
         timeframes = timeframes / 2
         currentTimeframes = currentTimeframes.append(timeframes)
-        updateCurrentTimes(timeframes, dayStart)
+        update_current_times(timeframes, dayStart)
 
 def performancesInDay(startTime, endTime):
     performInDay = int(input("How many performances are in this day?"))
     if performInDay >= 1:
         startTime = float(input("What time do you want the performance to start? (military time with minutes after a decimal, Ex. 16.30 is 4:30 PM)"))
         endTime = float(input("What time do you want the performance to end? (military time with minutes after a decimal, Ex. 16.30 is 4:30 PM)"))
-        performTime = startTime 
-        if performTime in clearTimeframes:
-            unclearTimeframes = unclearTimeframes.append(performTime)
+        nowTime = startTime
+        if nowTime == 1 or 2 or 3 or 4 or 5 or 6 or 7 or 8 or 9 or 10 or 11 or 12 or 13 or 14 or 15 or 16 or 17 or 18 or 19 or 20 or 21 or 22 or 23 or 24:
+            clearTimeframes.remove(nowTime)
+            unclearTimeframes.append(nowTime)
+            nowTime = nowTime + .30
+            if nowTime == endTime:
+                pass #maybe? idk if I need something here
+        elif nowTime == 1.30 or 2.30 or 3.30 or 4.30 or 5.30 or 6.30 or 7.30 or 8.30 or 9.30 or 10.30 or 11.30 or 12.30 or 13.30 or 14.30 or 15.30 or 16.30 or 17.30 or 18.30 or 19.30 or 20.30 or 21.30 or 22.30 or 23.30:
+            clearTimeframes.remove(nowTime)
+            unclearTimeframes.append(nowTime)
+            nowTime = round(nowTime)
+            nowTime = nowTime + 1
             
 def modify_performance_length():
     if days >= dayCount:
@@ -319,7 +328,7 @@ def modify_performance_length():
         end = float(input("What time does the performance end? (Minutes are after a decimal point, ex 12.30)"))
         timeframes = end - start
         timeframes = timeframes / 2
-        currentTimeframes = currentTimeframes + timeframe
+        currentTimeframes = currentTimeframes + timeframes
 
 def time_menu():
     while True:
