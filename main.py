@@ -1,6 +1,86 @@
 #Music Festival Management System
 
-#Jonas Fairchild, Venue Management
+# Darius Vaiaoga, Artist Management
+
+artist_list = []
+
+def print_artists():
+    if artist_list != []:
+        for artist in artist_list:
+            for property in artist:
+                print(f'{property.capitalize()}: {artist[property]}')
+    else:
+        input('Sorry, there seems to be no artists!')
+        return None
+
+
+def add_artist():
+
+    prompts = ['Who is the artist? ', 'What genre is the performance? ', 'How long will the performance go (in 30 minute blocks)? ']
+    sample_artist = {'name': '', 'genre': '', 'performance_duration': 0}
+
+    i = 0
+    for property in sample_artist:
+        if property != 'performance_duration':
+            sample_artist[property] = input(prompts[i])
+            i += 1
+        else:
+            try:
+                sample_artist[property] = int(input(prompts[i]))
+            except:
+                input('Invalid Input')
+                return None
+            
+    artist_list.append(sample_artist)
+
+def get_artist():
+
+    # Get all lowercase artist names
+    artist_names = []
+    for artist in artist_list:
+        artist_names.append(artist['name'].lower())
+
+    print_artists()
+
+    selected_artist = input('Which artist do you select? ').lower()
+
+    for artist in artist_list:  
+        if artist['name'].lower() == selected_artist:
+            return artist_list.index(artist)
+    
+def remove_artist():
+    artist_list.pop(artist_list[get_artist()])
+
+            
+# Prompts the user to modify a artist by providing them with what they can modify, then modifies that property by how they request
+def modify_artist():
+
+    # Get the artist to modify
+    try:
+        artist = artist_list[get_artist()]
+    except:
+        input("Couldn't find artist")
+        return None
+    properties = []
+
+    # Get all properties of artists
+    for property in artist:
+        properties.append(property)
+
+
+    prop_to_mod = input("What property do you want to modify? ").lower()
+
+    # Ask user what they want to change the property to. If the property is the performance duration, convert answer to integer
+    try:
+        if prop_to_mod != "performance_duration":
+            artist[prop_to_mod] = input(f'What do you want to change "{prop_to_mod.capitalize()}" to? ')
+        else:
+            artist[prop_to_mod] = int(input(f'What do you want to change "{prop_to_mod.capitalize()}" to? '))
+    except:
+        input('Invalid Input')
+        return None
+
+# Jonas Fairchild, Venue Management
 
 import os
 venues = []
@@ -32,7 +112,7 @@ def venue_modify(): #Handles all modification for all venues.
             print("That venue already exists.")
 
     else: #Handles nonsense makers :)
-        print("That's not a valid input. Try again.")
+        print("Invalid input. Try again.")
         return venue_modify()
 
     return venues
@@ -46,7 +126,7 @@ def stage_modify(): #Handles the modification for the stages within each venue.
             venue_choice = input().lower()
             if any(v["name"].lower() == venue_choice for v in venues):
                 break
-            print("Invalid input. Try again.")
+            print("That venue isn't on the list. Try again.")
         venue = next((v for v in venues if v['name'].lower() == venue_choice.lower()), []) #Specifies the venue that the name references
         choice = input("Do you want to add or remove a stage?: ").lower()
         
@@ -90,7 +170,7 @@ def equipment_modify(): #Handles the modification for the equipment lists for ea
             venue_choice = input().lower()
             if any(v["name"].lower() == venue_choice for v in venues):
                 break
-            print("Invalid input. Try again.")
+            print("That venue isn't on the list. Try again.")
         venue = next((v for v in venues if v['name'].lower() == venue_choice.lower()), []) #Specifies the venue that the name references
         
         while True:
@@ -100,7 +180,7 @@ def equipment_modify(): #Handles the modification for the equipment lists for ea
             stage_choice = input().lower()
             if any(s["name"].lower() == stage_choice for s in venue["stage"]):
                 break
-            print("Invalid input. Try again.")
+            print("That stage isn't on the list. Try again.")
         stage = next((s for s in venue["stage"] if s['name'].lower() == stage_choice.lower()), []) #Specifies the stage that the name references
         choice = input("Do you want to add or remove equipment?: ").lower()
         
@@ -118,7 +198,7 @@ def equipment_modify(): #Handles the modification for the equipment lists for ea
                 print("That stage isn't on the list.")
             else:
                 print("There is no equipment to remove.")
-
+  
         elif choice == "add": #Handles the adding of equipment
             equipment_name = input("What is the name of your equipment?: ")
             while True:
@@ -126,7 +206,7 @@ def equipment_modify(): #Handles the modification for the equipment lists for ea
                     equipment_count = int(input("How much of this equipment is needed?: "))
                     break
                 except:
-                    print("Invalid input. Try again.")
+                    print("That's not an integer. Try again.")
 
             if not any(e["name"].lower() == equipment_name.lower() for e in stage['equipment']): #Avoids duplicates
                 stage['equipment'].append({"name": equipment_name, "count": equipment_count}) #Adds the equipment to the list
@@ -143,12 +223,15 @@ def equipment_modify(): #Handles the modification for the equipment lists for ea
     return venues
 
 def display_venues(): #Shows all venues in an organized manner.
-    for venue in venues:
-        print(f"{venue['name']}:")
-        for stage in venue['stage']:
-            print(f"\t{stage['name']}:")
-            for equipment in stage['equipment']:
-                print(f"\t\t{equipment['count']} {equipment['name']}s")
+    if venues:
+        for venue in venues:
+            print(f"{venue['name']}.")
+            for stage in venue['stage']:
+                print(f"\t{stage['name']}.")
+                for equipment in stage['equipment']:
+                    print(f"\t\t{equipment['count']} {equipment['name']}s")
+    else:
+        print("There's nothing to display.")
 
 def venue_management(): #A sort of sub-main function that contains a user interface for this smaller part of the program.
     while True:
@@ -164,14 +247,20 @@ def venue_management(): #A sort of sub-main function that contains a user interf
             elif choice == 4:
                 display_venues()
             elif choice == 5:
-                return venues
+                try:
+                    return venues
+                except:
+                    venues = []
+                    return venues
             else:
-                print("Invalid input. Try again.")
+                print("That isn't on the list of options. Try again.")
+            input("Done reading?: ")
         except:
-            print("Invalid input. Try again.")
+            print("That's not an integer. Try again.")
+            input("Done reading?: ")
 
 
-
+# Matthew McKinley, Time Management
 
 
 currentTimes = ()
@@ -180,10 +269,11 @@ schedule = []
 clearTimeframes = []
 unclearTimeframes = []
 
-days = int(input("How many days are you going to have the festival be? :"))
+days = 0
 dayCount = 0
 
-def updateCurrentTimes(timeframes, dayStart, endTime, clearTimeframes):
+
+def update_current_times(timeframes, startTime, endTime):
     timeframeCount = timeframes
     timeNow = dayStart
     timeNowHour = round(dayStart)
@@ -205,13 +295,14 @@ def updateCurrentTimes(timeframes, dayStart, endTime, clearTimeframes):
     return clearTimeframes, schedule
 clearTimeframes, schedule = updateCurrentTimes()
 
-if days >= dayCount:
-    dayStart = int(input("What time does the day start? (Make it an hour, no minutes)"))
-    dayEnd = float(input("What time does the day end? (Minutes are after a decimal point, ex 12.30)"))
-    timeframes = dayEnd - dayStart
-    timeframes = timeframes / 2
-    currentTimeframes = currentTimeframes.append(timeframes)
-    updateCurrentTimes(timeframes, dayStart)
+def modify_festival_length():
+    if days >= dayCount:
+        dayStart = int(input("What time does the day start? (Make it an hour, no minutes)"))
+        dayEnd = float(input("What time does the day end? (Minutes are after a decimal point, ex 12.30)"))
+        timeframes = dayEnd - dayStart
+        timeframes = timeframes / 2
+        currentTimeframes = currentTimeframes.append(timeframes)
+        updateCurrentTimes(timeframes, dayStart)
 
 def performancesInDay(startTime, endTime):
     performInDay = int(input("How many performances are in this day?"))
@@ -221,3 +312,84 @@ def performancesInDay(startTime, endTime):
         performTime = startTime 
         if performTime in clearTimeframes:
             unclearTimeframes = unclearTimeframes.append(performTime)
+            
+def modify_performance_length():
+    if days >= dayCount:
+        start = float(input("What time does the performance start? (Minutes are after a decimal point, ex. 10.30)"))
+        end = float(input("What time does the performance end? (Minutes are after a decimal point, ex 12.30)"))
+        timeframes = end - start
+        timeframes = timeframes / 2
+        currentTimeframes = currentTimeframes + timeframe
+
+def time_menu():
+    while True:
+        os.system('cls')
+        print('"---------- Artists ----------')
+        match input('What do you want to do with the artists? \n1. See Artists \n2. Add Artist \n3. Remove Artist \n4. Modify Artist \n6. Go Back \n'):
+            case '1':
+                print_artists()
+            case '2':
+                add_artist()
+            case '3':
+                remove_artist()
+            case '4':
+                modify_artist()
+            case '6':
+                main()
+                break
+            case _:
+                input('Invalid Input')
+
+
+#Jonas Fairchild, Master display and Main function
+
+def display_all(): #Uses a combination of display functions from every part of the code to display everything imaginable.
+    print("---------- Artists ----------\n")
+    print_artists()
+    print("\n---------- Schedule ----------\n")
+    print("\n---------- Venues ----------\n")
+    display_venues()
+    print("\n---------- Tickets/attendees ----------\n")
+
+def artist_menu():
+    while True:
+        os.system('cls')
+        print('"---------- Artists ----------')
+        match input('What do you want to do with the artists? \n1. See Artists \n2. Add Artist \n3. Remove Artist \n4. Modify Artist \n6. Go Back \n'):
+            case '1':
+                print_artists()
+            case '2':
+                add_artist()
+            case '3':
+                remove_artist()
+            case '4':
+                modify_artist()
+            case '6':
+                main()
+                break
+            case _:
+                input('Invalid Input')
+                
+
+def main(): #Provides a UI that branches to every part of the program, allowing modification of everything.
+    while True:
+        os.system("cls")
+        choice = input("What do you want to do?\n1. Manage artists\n2. Manage schedule\n3. Manage venues\n4. Manage ticket sales/attendees\n5. Display everything\n6. Exit program\n")
+        if choice == '1':
+            artist_menu()
+            break
+        elif choice == '2':
+            pass
+        elif choice == '3':
+            venues = venue_management()
+        elif choice == '4':
+            pass
+        elif choice == '5':
+            display_all()
+        elif choice == '6':
+            break
+        else:
+            print("That isn't on the list of options. Try again.")
+
+main()
+
