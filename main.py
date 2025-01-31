@@ -1,5 +1,6 @@
 # Music Festival Management System
 
+# ------------------------------------ START OF GABES CODE ------------------------------------------
 # Displays tickets in a list with each ticket numbered
 def TicketDisplay(ticket_list):
     print('\033cDisplaying tickets:')
@@ -87,6 +88,7 @@ def TicketChange(ticket_list, searched_item):
     ticket_list[ticket_location][changeIndex] = info # Returns the changed and error handled ticket list
     return ticket_list
 
+
 # Part of ticket function, Searches for an existing ticket in the ticket list
 def TicketSearch(ticket_list, action):
     while True:
@@ -166,7 +168,9 @@ def TicketUI(ticket_list):
             print('\033cThat was not a valid option please try again!\n')
             continue
         return ticket_list # returns ticket list to main function for usage later
-# comment delete later
+
+# ------------------------------------ END OF GABES CODE ------------------------------------------
+
 """
 currentTimes = ()
 currentTimeframes = []
