@@ -310,13 +310,13 @@ def performancesInDay(startTime, endTime):
         startTime = float(input("What time do you want the performance to start? (military time with minutes after a decimal, Ex. 16.30 is 4:30 PM)"))
         endTime = float(input("What time do you want the performance to end? (military time with minutes after a decimal, Ex. 16.30 is 4:30 PM)"))
         nowTime = startTime
-        if nowTime == 1 or 2 or 3 or 4 or 5 or 6 or 7 or 8 or 9 or 10 or 11 or 12 or 13 or 14 or 15 or 16 or 17 or 18 or 19 or 20 or 21 or 22 or 23 or 24:
+        if nowTime in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]:
             clearTimeframes.remove(nowTime)
             unclearTimeframes.append(nowTime)
             nowTime = nowTime + .30
             if nowTime == endTime:
                 pass #maybe? idk if I need something here
-        elif nowTime == 1.30 or 2.30 or 3.30 or 4.30 or 5.30 or 6.30 or 7.30 or 8.30 or 9.30 or 10.30 or 11.30 or 12.30 or 13.30 or 14.30 or 15.30 or 16.30 or 17.30 or 18.30 or 19.30 or 20.30 or 21.30 or 22.30 or 23.30:
+        elif nowTime in [1.30, 2.30, 3.30, 4.30, 5.30, 6.30, 7.30, 8.30, 9.30, 10.30, 11.30, 12.30, 13.30, 14.30, 15.30, 16.30, 17.30, 18.30, 19.30, 20.30, 21.30, 22.30, 23.30]:
             clearTimeframes.remove(nowTime)
             unclearTimeframes.append(nowTime)
             nowTime = round(nowTime)
