@@ -173,7 +173,7 @@ def TicketUI(ticket_list):
 
 #Music Festival Management System
 
-# Darius Vaiaoga, Artist Management
+# Darius Vaiaoga, Artist Management 
 
 artist_list = []
 
@@ -184,7 +184,6 @@ def print_artists():
                 print(f'{property.capitalize()}: {artist[property]}')
     else:
         input('Sorry, there seems to be no artists!')
-
 
 def add_artist():
 
@@ -222,15 +221,12 @@ def get_artist():
                 return artist_list.index(artist)
     
 def remove_artist():
-    try:
-        artist_list.pop(artist_list[get_artist()])
-    except:
-        input("Couldn't find artist")
+    artist_list.remove(artist_list[get_artist()])
 
             
 # Prompts the user to modify a artist by providing them with what they can modify, then modifies that property by how they request
 def modify_artist():
-
+    
     # Get the artist to modify
     try:
         artist = artist_list[get_artist()]
@@ -243,8 +239,11 @@ def modify_artist():
     for property in artist:
         properties.append(property)
 
-
     prop_to_mod = input("What property do you want to modify? ").lower()
+
+    if prop_to_mod != 'name' or 'genre':
+        input("That property doesn't exist")
+        return None
 
     # Ask user what they want to change the property to. If the property is the performance duration, convert answer to integer
     try:
@@ -455,6 +454,9 @@ def print_timetable():
         print(f"{timeFrame} - {performance['Artist']['name']}'s {performance['Artist']['genre']} performance")
 
 def update_current_times(timeframes, startTime, endTime):
+    # timeframes is half hour segments
+    # timeframeCount is a countable version of timeframes
+
     timeframeCount = timeframes
     timeNow = startTime
     timeNowHour = round(startTime)
@@ -516,6 +518,12 @@ def performancesInDay(startTime, endTime):
             nowTime = round(nowTime)
             nowTime = nowTime + 1
         performInDay -= 1
+
+# Darius Vaiaoga, Search Functions
+
+
+
+    
 
 #Jonas Fairchild, Master display and Main function
 
