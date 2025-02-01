@@ -7,7 +7,7 @@ def TicketDisplay(ticket_list):
 
     for i in range(len(ticket_list)):
         # Prints the name, the age, and then the ticket type
-        print(f'{i+1}. Name: {ticket_list[i][1]}, Age: {ticket_list[i][2]}, Ticket Type: {ticket_list[i][0]}')
+        print(f"{i+1}. Name: {ticket_list[i]['Name']}, Age: {ticket_list[i]['Age']}, Ticket Type: {ticket_list[i]['Type']}")
 
 
 # Part of ticket function, Adds a new ticket to the ticket list
@@ -42,7 +42,8 @@ def TicketAdd(ticket_list):
             print('\033cError That was not a valid option, please try again!') # If none of the questions could run, the user tpyed in something invalid
 
         ticket_info.append(info) # Once the question is asked the user info is stored inside of a list
-    ticket_list.append(ticket_info) # Which is appended to ticket info to shortly be returned
+    dict_info = {'Type':ticket_info[0],'Name':ticket_info[1],'Age':ticket_info[2]}
+    ticket_list.append(dict_info) # Which is appended to ticket info to shortly be returned
     return ticket_list
 
 
@@ -59,7 +60,6 @@ def TicketChange(ticket_list, searched_item):
     while True:
         changeType = input('  --->  ')
         if changeType.lower() in ['type','name','age']:
-            changeIndex = ['type','name','age'].index(changeType.lower())
             break
         print('\nThat was not a valid option. (Options: type, name, age)')
 
@@ -68,24 +68,24 @@ def TicketChange(ticket_list, searched_item):
         info = input(f'What would you like to change the {changeType} to?  --->  ')
 
         # If the user wants to change ticket type
-        if changeIndex == 0:
+        if changeType == 'type':
             if info.lower() in ['1-day','1day','1 day','3-day','3day','3 day','vip']:
                 if not info == 'vip':
                     info = f'{info[0]}-day'
                     break
         
         # if the user want to change their name
-        elif changeIndex == 1:
+        elif changeType == 'name':
             info = info.title()
             break
 
         # if the user wants to change their age
-        elif changeIndex == 2:
+        elif changeType == 'age':
             if info.isdigit():
                 break
 
         print('Error That was not a valid option, please try again!')
-    ticket_list[ticket_location][changeIndex] = info # Returns the changed and error handled ticket list
+    ticket_list[ticket_location][changeType.title()] = info # Returns the changed and error handled ticket list
     return ticket_list
 
 
@@ -99,13 +99,13 @@ def TicketSearch(ticket_list, action):
         # This list will contain all of the found tickets based off of search results
         search_list = []
         for ticket in ticket_list:
-            if search1.title().startswith(ticket[1]) or ticket[1].startswith(search1.title()):
-                if search2 == ticket[2]:
+            if search1.title().startswith(ticket['Name']) or ticket['Name'].startswith(search1.title()):
+                if search2 == ticket['Age']:
                     search_list.append(ticket)
 
         # These will collect 1 ticket that can be removed or changed at the end of the function
         if len(search_list) == 1: # If only one item was found, it tells you.
-            print(f'\033cA {search_list[-1][0]} ticket with the name: {search_list[-1][1]}, age: {search_list[-1][2]} was found. Is this the right ticket?')
+            print(f"\033cA {search_list[-1]['Type']} ticket with the name: {search_list[-1]['Name']}, age: {search_list[-1]['Age']} was found. Is this the right ticket?")
             while True:
                 again = input('(y/n) --->  ')
                 if again.lower() in ['y','n']:
@@ -116,7 +116,7 @@ def TicketSearch(ticket_list, action):
         elif len(search_list) >= 2: # If multiple items were would it prints them out and allows you to choose between them
             print(f'\033c{len(search_list)} tickets have been found.')
             for ticket in range(len(search_list)):
-                print(f'  {ticket+1}. Name: {search_list[ticket][1]}, Age: {search_list[ticket][2]}, Type: {search_list[ticket][0]}')
+                print(f"  {ticket+1}. Name: {search_list[ticket]['Name']}, Age: {search_list[ticket]['Age']}, Type: {search_list[ticket]['Type']}")
             print('\nWhich ticket seemed correct to you?')
             while True:
                 try:
@@ -170,7 +170,6 @@ def TicketUI(ticket_list):
         return ticket_list # returns ticket list to main function for usage later
 
 # ------------------------------------ END OF GABES CODE ------------------------------------------
-
 
 """
 currentTimes = ()
