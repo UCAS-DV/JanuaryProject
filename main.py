@@ -364,6 +364,8 @@ clearTimeframes = []
 performances = []
 unclearTimeframes = []
 
+totalTimes = (1, 1.30, 2, 2.30, 3, 3.30, 4, 4.30, 5, 5.30, 6, 6.30, 7, 7.30, 8, 8.30, 9, 9.30, 10, 10.30, 11, 11.30, 12, 12.30, 13, 13.30, 14, 14.30, 15, 15.30, 16, 16.30, 17, 17.30, 18, 18.30, 19, 19.30, 20, 20.30, 21, 21.30, 22, 22.30, 23, 23.30)
+
 days = 0
 dayCount = 0
 
@@ -448,8 +450,6 @@ def performancesInDay():
             nowTime = nowTime + 1
         performInDay -= 1
     return clearTimeframes, unclearTimeframes, startTime, endTime
-
-
 
 # Darius Vaiaoga, Artist Management 
 
