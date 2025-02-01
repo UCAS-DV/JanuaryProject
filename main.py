@@ -582,3 +582,5 @@ def main(): #Provides a UI that branches to every part of the program, allowing 
             break
         else:
             print("That isn't on the list of options. Try again.")
+
+main()
