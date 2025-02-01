@@ -286,7 +286,7 @@ def venue_management(): #A sort of sub-main function that contains a user interf
 # Matthew McKinley, Time Management
 
 
-currentTimes = ()
+currentTimes = []
 currentTimeframes = []
 schedule = []
 
@@ -303,13 +303,13 @@ def print_timetable():
     for timeFrame in unclearTimeframes:
         print(f'{timeFrame} - {performances[unclearTimeframes.index(timeFrame)]}')
 
-def update_current_times(timeframes, startTime, endTime):
+def update_current_times(timeframes, startTime, endTime, currentTimes = []):
     timeframeCount = timeframes
     timeNow = startTime
     timeNowHour = round(startTime)
-
-    currentTimes = currentTimes + timeNow
-    currentTimes = currentTimes + timeNowHour
+    
+    currentTimes = currentTimes.append(timeNow)
+    currentTimes = currentTimes.append(timeNowHour)
 
     while timeNow <= endTime:
         remainder = timeframeCount % 2
@@ -324,14 +324,15 @@ def update_current_times(timeframes, startTime, endTime):
     clearTimeframes = schedule
     return clearTimeframes, schedule
 
-def modify_festival_length():
+
+def modify_festival_length(currentTimeframes):
     if days >= dayCount:
         dayStart = int(input("What time does the day start? (Make it an hour, no minutes)"))
         dayEnd = float(input("What time does the day end? (Minutes are after a decimal point, ex 12.30)"))
         timeframes = dayEnd - dayStart
         timeframes = timeframes / 2
         currentTimeframes = currentTimeframes.append(timeframes)
-        update_current_times(timeframes, dayStart, dayEnd)
+        update_current_times(timeframes, dayStart, dayEnd, currentTimes)
 
 def performancesInDay(startTime, endTime):
     performInDay = int(input("How many performances are in this day?"))
@@ -352,7 +353,7 @@ def performancesInDay(startTime, endTime):
             nowTime = nowTime + 1
         performInDay -= 1
             
-def modify_performance_length():
+def modify_performance_length(currentTimeframes):
     if days >= dayCount:
 
         start = float(input("What time does the performance start? (Minutes are after a decimal point, ex. 10.30)"))
@@ -364,6 +365,7 @@ def modify_performance_length():
 def artist_menu():
     while True:
         os.system('cls')
+
         match input('What do you want to do with artist management? \n1. See Artists \n2. Add Artist \n3. Remove Artist \n4. Modify Artist \n6. Go Back \n'):
             case '1':
                 print_artists()
@@ -396,7 +398,7 @@ def main(): #Provides a UI that branches to every part of the program, allowing 
         if choice == '1':
             artist_menu()
         elif choice == '2':
-            time_menu()
+            pass
         elif choice == '3':
             venues = venue_management()
         elif choice == '4':
