@@ -448,10 +448,6 @@ clearTimeframes = []
 performances = []
 unclearTimeframes = []
 
-
-
-
-
 days = 0
 dayCount = 0
 
@@ -462,7 +458,7 @@ def print_timetable():
 
         print(f"{timeFrame} - {performance['Artist']['name']}'s {performance['Artist']['genre']} performance")
 
-def update_current_times(timeframes, dayStart, dayEnd, clearTimeframes):
+def update_current_times(timeframes, dayStart, dayEnd, clearTimeframes, schedule):
     # timeframes is half hour segments
     # timeframeCount is a countable version of timeframes
 
@@ -470,10 +466,18 @@ def update_current_times(timeframes, dayStart, dayEnd, clearTimeframes):
     timeNow = dayStart
     timeNowHour = int(dayStart)
 
-    clearTimeframes = clearTimeframes.append([timeNow, timeNowHour])
+    times = []
+    fixedTimes = []
+    fixedTimes = times.append(timeNow)
+    fixedTimes = times.append(timeNowHour)
+    times.append(fixedTimes)
+    clearTimeframes.append(times)
+    """
+    clearTimeframes = clearTimeframes.append(timeNow)
+    clearTimeframes = clearTimeframes.append(timeNowHour)
     clearTimeframes.sort()
     print(clearTimeframes)
-
+    """
     while timeNow <= dayEnd:
         remainder = timeframeCount % 2
         if remainder == 1:
@@ -493,9 +497,9 @@ def modify_festival_length():
         timeframes = dayEnd - dayStart
         timeframes = timeframes / 2
         currentTimeframes.append(timeframes)
-        update_current_times(timeframes, dayStart, dayEnd, clearTimeframes)
+        update_current_times(timeframes, dayStart, dayEnd, clearTimeframes, schedule)
     return dayStart, dayEnd
-def performancesInDay(startTime, endTime):
+def performancesInDay():
     performInDay = int(input("How many performances are in this day?"))
 
     sample_performance = {'Artist': {}, 'Start Time': 1.30, 'End Time': 2.30}
@@ -508,8 +512,8 @@ def performancesInDay(startTime, endTime):
             input("Couldn't find artist")
             break
 
-        startTime = float(input("What time do you want the performance to start? (military time with minutes after a decimal, Ex. 16.30 is 4:30 PM)"))
-        endTime = float(input("What time do you want the performance to end? (military time with minutes after a decimal, Ex. 16.30 is 4:30 PM)"))
+        startTime = float(input("What time do you want the performance to start? (Starts on an hour)"))
+        endTime = float(input("What time do you want the performance to end? (Starts on an hour)"))
         nowTime = startTime
 
         sample_performance['Start Time'] = startTime
@@ -576,8 +580,8 @@ def time_menu():
             case '2':
                 modify_festival_length()
             case '3':
-                performancesInDay(dayStart, endTime)
-            case '6':
+                performancesInDay()
+            case '4':
                 main()
                 break
             case _:
