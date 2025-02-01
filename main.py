@@ -317,9 +317,9 @@ def equipment_modify(): #Handles the modification for the equipment lists for ea
 
     return venues
 
-def display_venues(venues_for_display): #Shows all venues in an organized manner.
-    if venues_for_display:
-        for venue in venues_for_display:
+def display_venues(): #Shows all venues in an organized manner.
+    if venues:
+        for venue in venues:
             print(f"{venue['name']}.")
             for stage in venue['stage']:
                 print(f"\t{stage['name']}.")
@@ -330,6 +330,7 @@ def display_venues(venues_for_display): #Shows all venues in an organized manner
 
 def venue_management(): #A sort of sub-main function that contains a user interface for this smaller part of the program.
     while True:
+        os.system("cls")
         try:
             choice = int(input("What do you want to do?\n1. Add/Remove a venue\n2. Add/Remove a stage\n3. Add/Remove equipment\n4. Display all venues/stages/equipment\n5. Exit venue management\n"))
             if choice == 1:
@@ -499,31 +500,27 @@ def remove_artist():
 
 # Prompts the user to modify a artist by providing them with what they can modify, then modifies that property by how they request
 def modify_artist():
-    
-    # Get the artist to modify
-    try:
-        artist = artist_list[get_artist()]
-    except:
-        input("Couldn't find artist")
-        return None
-    properties = []
+    if artist_list:
+        # Get the artist to modify
+        try:
+            artist = artist_list[get_artist()]
+        except:
+            print("Couldn't find artist.")
+            return
 
-    # Get all properties of artists
-    for property in artist:
-        properties.append(property)
+        prop_to_mod = input("What property do you want to modify? ").lower()
 
-    prop_to_mod = input("What property do you want to modify? ").lower()
+        if prop_to_mod not in ['name', 'genre', 'performance length']:
+            print("That property doesn't exist.")
+            return
 
-    if prop_to_mod not in ['name', 'genre', 'performance length']:
-        input("That property doesn't exist")
-        return None
-
-    # Ask user what they want to change the property to. If the property is the performance duration, convert answer to integer
-    try:
-        artist[prop_to_mod] = input(f'What do you want to change "{prop_to_mod.capitalize()}" to? ')
-    except:
-        input('Invalid Input')
-        return None
+        # Ask user what they want to change the property to. If the property is the performance duration, convert answer to integer
+        try:
+            artist[prop_to_mod] = input(f'What do you want to change "{prop_to_mod.capitalize()}" to? ')
+        except:
+            print('Invalid Input')
+    else:
+        print("Sorry, there seems to be no artists!")
 
 # Darius Vaiaoga, Search Functions
 
@@ -579,7 +576,7 @@ def search():
 
                     # Print Stage's name and equipment
                     print('Stage:')
-                    print(f'Name: {item['info']['name']}')
+                    print(f"Name: {item['info']['name']}")
                     for equipment in item['info']['equipment']:
                         print(f"\t{equipment['count']} {equipment['name']}s")
 
@@ -604,7 +601,7 @@ def display_all(): #Uses a combination of display functions from every part of t
     print_artists()
     print("\n---------- Schedule ----------\n")
     print("\n---------- Venues ----------\n")
-    display_venues(venues)
+    display_venues()
     print("\n---------- Tickets/attendees ----------\n")
     ticket_display(attendee_list)
 
@@ -612,7 +609,7 @@ def display_all(): #Uses a combination of display functions from every part of t
 
 def time_menu():
     while True:
-        print('"---------- Time ----------')
+        os.system('cls')
         match input('What do you want to do with time? \n1. See Time Table \n2. Modify Festival Hours \n3. Set Performances \n4. Go Back'):
             case '1':
                 print_timetable()
@@ -628,7 +625,7 @@ def time_menu():
 
 def artist_menu():
     while True:
-        print('---------- Artists ----------')
+        os.system("cls")
         match input('What do you want to do with the artists? \n1. See Artists \n2. Add Artist \n3. Remove Artist \n4. Modify Artist \n5. Go Back \n'):
             case '1':
                 print_artists()
@@ -642,15 +639,14 @@ def artist_menu():
                 main()
                 break
             case _:
-                input('Invalid Input')
+                print('Invalid Input. Try again.')
+        input("Done reading?: ")
             
 
 def main(): #Provides a UI that branches to every part of the program, allowing modification of everything.
     ticket_list = []
-
-    input('-~-~-~-~-~-~-~-MUSIC FESTIVAL MANAGER-~-~-~-~-~-~-~-\n')
-
     while True:
+        os.system("cls")
         choice = input("What do you want to do?\n1. Manage artists\n2. Manage schedule\n3. Manage venues\n4. Manage ticket sales/attendees\n5. Display everything\n6. Search\n7. Exit program\n")
         if choice == '1':
             artist_menu()
@@ -665,8 +661,9 @@ def main(): #Provides a UI that branches to every part of the program, allowing 
         elif choice == '6':
             search()
         elif choice == '7':
-            exit()
+            break
         else:
             print("That isn't on the list of options. Try again.")
-
+            input("Done reading?: ")
+        
 main()
