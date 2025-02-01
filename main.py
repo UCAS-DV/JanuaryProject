@@ -1,6 +1,7 @@
-
-
 # ------------------------------------ START OF GABES CODE ------------------------------------------
+
+ticket_list = []
+
 # Displays tickets in a list with each ticket numbered
 def TicketDisplay(ticket_list):
     print('\033cDisplaying tickets:')
@@ -437,11 +438,17 @@ def venue_management(): #A sort of sub-main function that contains a user interf
 
 # Matthew McKinley, Time Management
 
-currentTimes = ()
 currentTimeframes = []
 schedule = []
 
 clearTimeframes = []
+
+performances = []
+unclearTimeframes = []
+
+
+
+
 
 days = 0
 dayCount = 0
@@ -453,26 +460,26 @@ def print_timetable():
 
         print(f"{timeFrame} - {performance['Artist']['name']}'s {performance['Artist']['genre']} performance")
 
-def update_current_times(timeframes, startTime, endTime):
+def update_current_times(timeframes, dayStart, dayEnd, clearTimeframes):
     # timeframes is half hour segments
     # timeframeCount is a countable version of timeframes
 
     timeframeCount = timeframes
-    timeNow = startTime
-    timeNowHour = round(startTime)
+    timeNow = dayStart
+    timeNowHour = int(dayStart)
 
-    currentTimes = currentTimes + timeNow
-    currentTimes = currentTimes + timeNowHour
+    clearTimeframes = clearTimeframes.append([timeNow, timeNowHour])
+    clearTimeframes.sort()
+    print(clearTimeframes)
 
-    while timeNow <= endTime:
+    while timeNow <= dayEnd:
         remainder = timeframeCount % 2
         if remainder == 1:
-            timeNowHour = timeNowHour + 1
+            timeNowHour += 1
         elif remainder == 0:
-            timeNow = timeNow + .30
+            timeNow += 0.30
     
-    schedule = schedule + timeNow
-    schedule = schedule + timeNowHour
+    schedule.extend([timeNow, timeNowHour])
     schedule = sorted(schedule)
     clearTimeframes = schedule
     return clearTimeframes, schedule
@@ -483,9 +490,9 @@ def modify_festival_length():
         dayEnd = float(input("What time does the day end? (Minutes are after a decimal point, ex 12.30)"))
         timeframes = dayEnd - dayStart
         timeframes = timeframes / 2
-        currentTimeframes = currentTimeframes.append(timeframes)
-        update_current_times(timeframes, dayStart, dayEnd)
-
+        currentTimeframes.append(timeframes)
+        update_current_times(timeframes, dayStart, dayEnd, clearTimeframes)
+    return dayStart, dayEnd
 def performancesInDay(startTime, endTime):
     performInDay = int(input("How many performances are in this day?"))
 
@@ -509,7 +516,7 @@ def performancesInDay(startTime, endTime):
         if nowTime in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]:
             clearTimeframes.remove(nowTime)
             unclearTimeframes.append(nowTime)
-            nowTime = nowTime + .30
+            nowTime += 0.30
             if nowTime == endTime:
                 continue
         elif nowTime in [1.30, 2.30, 3.30, 4.30, 5.30, 6.30, 7.30, 8.30, 9.30, 10.30, 11.30, 12.30, 13.30, 14.30, 15.30, 16.30, 17.30, 18.30, 19.30, 20.30, 21.30, 22.30, 23.30]:
@@ -518,12 +525,33 @@ def performancesInDay(startTime, endTime):
             nowTime = round(nowTime)
             nowTime = nowTime + 1
         performInDay -= 1
-
+    return clearTimeframes, unclearTimeframes, startTime, endTime
 # Darius Vaiaoga, Search Functions
 
+search_list = []
 
+# Combines artist list, venue list, and ticket lists
+def create_search_list():
+    for artist in artist_list:
+        search_list.append(artist)
 
-    
+    for venue in venues:
+        search_list.append(venue)
+
+    for ticket in ticket_list:
+        search_list.append(ticket)
+
+def print_result(result):
+    for property in result:
+        print(f'{property.capitalize()}: {result[property]}')
+
+def search():
+    query = input('What do you want to search for? ').lower()
+
+    for item in search_list:
+        for property in item:
+            if [item[property][0].lower(), item[property][1].lower()] == [query[0], [1]]:
+                print_result(item)
 
 #Jonas Fairchild, Master display and Main function
 
@@ -534,18 +562,19 @@ def display_all(): #Uses a combination of display functions from every part of t
     print("\n---------- Venues ----------\n")
     display_venues()
     print("\n---------- Tickets/attendees ----------\n")
+    TicketDisplay(ticket_list)
 
 def time_menu():
     while True:
         os.system('cls')
-        print('"---------- Time ----------')
-        match input('What do you want to do with time? \nSee Time Table \n2. Modify Festival Hours \n3. Set Performances \n6.'):
+        print('---------- Time ----------')
+        match input('What do you want to do with time? \n1. See Time Table \n2. Modify Festival Hours \n3. Set Performances \n6. Go Back'):
             case '1':
                 print_timetable()
             case '2':
                 modify_festival_length()
             case '3':
-                performancesInDay()
+                performancesInDay(dayStart, endTime)
             case '6':
                 main()
                 break
@@ -555,7 +584,7 @@ def time_menu():
 def artist_menu():
     while True:
         os.system('cls')
-        print('"---------- Artists ----------')
+        print('---------- Artists ----------')
         match input('What do you want to do with the artists? \n1. See Artists \n2. Add Artist \n3. Remove Artist \n4. Modify Artist \n6. Go Back \n'):
             case '1':
                 print_artists()
@@ -575,7 +604,7 @@ def artist_menu():
 def main(): #Provides a UI that branches to every part of the program, allowing modification of everything.
     while True:
         os.system("cls")
-        choice = input("What do you want to do?\n1. Manage artists\n2. Manage schedule\n3. Manage venues\n4. Manage ticket sales/attendees\n5. Display everything\n6. Exit program\n")
+        choice = input("What do you want to do?\n1. Manage artists\n2. Manage schedule\n3. Manage venues\n4. Manage ticket sales/attendees\n5. Display everything\n6. Search\n7. Exit program\n")
         if choice == '1':
             artist_menu()
         elif choice == '2':
@@ -583,10 +612,14 @@ def main(): #Provides a UI that branches to every part of the program, allowing 
         elif choice == '3':
             venues = venue_management()
         elif choice == '4':
-            pass
+            ticket_list = TicketUI(ticket_list)
         elif choice == '5':
             display_all()
         elif choice == '6':
+            search()
+        elif choice == '7':
             break
         else:
             print("That isn't on the list of options. Try again.")
+
+main()
