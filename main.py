@@ -271,10 +271,18 @@ unclearTimeframes = []
 
 days = 0
 dayCount = 0
+dayStart
 
 
 def update_current_times(timeframes, startTime, endTime):
+    # timeframes is half hour segments
+    # timeframeCount is a countable version of timeframes
+
     timeframeCount = timeframes
+
+    # timeNow is half hour segments
+    # timeNowHour is hour segments
+
     timeNow = dayStart
     timeNowHour = round(dayStart)
 
@@ -293,7 +301,8 @@ def update_current_times(timeframes, startTime, endTime):
     schedule = sorted(schedule)
     clearTimeframes = schedule
     return clearTimeframes, schedule
-clearTimeframes, schedule = updateCurrentTimes()
+
+clearTimeframes, schedule = update_current_times()
 
 def modify_festival_length():
     if days >= dayCount:
@@ -302,7 +311,7 @@ def modify_festival_length():
         timeframes = dayEnd - dayStart
         timeframes = timeframes / 2
         currentTimeframes = currentTimeframes.append(timeframes)
-        updateCurrentTimes(timeframes, dayStart)
+        update_current_times(timeframes, dayStart)
 
 def performancesInDay(startTime, endTime):
     performInDay = int(input("How many performances are in this day?"))
@@ -324,12 +333,12 @@ def modify_performance_length():
 def time_menu():
     while True:
         os.system('cls')
-        print('"---------- Artists ----------')
-        match input('What do you want to do with the artists? \n1. See Artists \n2. Add Artist \n3. Remove Artist \n4. Modify Artist \n6. Go Back \n'):
+        print('"---------- Time ----------')
+        match input('What do you want to do with the times? \n1. See Artists \n2. Modify Festival Length \n3. Remove Artist \n4. Modify Artist \n6. Go Back \n'):
             case '1':
                 print_artists()
             case '2':
-                add_artist()
+                modify_festival_length()
             case '3':
                 remove_artist()
             case '4':
