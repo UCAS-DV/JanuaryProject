@@ -6,7 +6,7 @@
 attendee_list = []
 # Displays tickets in a list with each ticket numbered
 def ticket_display(ticket_list):
-    print('\033cDisplaying tickets:')
+    print('Displaying tickets:')
 
     for i in range(len(ticket_list)):
         # Prints the name, the age, and then the ticket type
@@ -97,7 +97,7 @@ def ticket_change(ticket_list, searched_item):
 def ticket_search(ticket_list, action):
     while True:
         # Searches for tickets based off of age, and name
-        search1 = input('\033cWhat name would you like to search for?  --->  ')
+        search1 = input('What name would you like to search for?  --->  ')
         search2 = input('What age would you like to search for?  --->  ')
 
         # This list will contain all of the found tickets based off of search results
@@ -109,7 +109,7 @@ def ticket_search(ticket_list, action):
 
         # These will collect 1 ticket that can be removed or changed at the end of the function
         if len(search_list) == 1: # If only one item was found, it tells you.
-            print(f"\033cA {search_list[-1]['Type']} ticket with the name: {search_list[-1]['Name']}, age: {search_list[-1]['Age']} was found. Is this the right ticket?")
+            print(f"A {search_list[-1]['Type']} ticket with the name: {search_list[-1]['Name']}, age: {search_list[-1]['Age']} was found. Is this the right ticket?")
             while True:
                 again = input('(y/n) --->  ')
                 if again.lower() in ['y','n']:
@@ -118,7 +118,7 @@ def ticket_search(ticket_list, action):
             if again == 'y': break
 
         elif len(search_list) >= 2: # If multiple items were would it prints them out and allows you to choose between them
-            print(f'\033c{len(search_list)} tickets have been found.')
+            print(f'{len(search_list)} tickets have been found.')
             for ticket in range(len(search_list)):
                 print(f"  {ticket+1}. Name: {search_list[ticket]['Name']}, Age: {search_list[ticket]['Age']}, Type: {search_list[ticket]['Type']}")
             print('\nWhich ticket seemed correct to you?')
@@ -133,7 +133,7 @@ def ticket_search(ticket_list, action):
             break
 
         else: # If no items were found it gives the option to search for another item.
-            print('\033cNothing was found. Would you like to search again?')
+            print('Nothing was found. Would you like to search again?')
             while True:
                 again = input('(y/n) --->  ')
                 if again.lower() in ['y','n']:
@@ -150,7 +150,6 @@ def ticket_search(ticket_list, action):
 
 # This UI function is used for giving user options to add, change, remove their ticket in the ticket list. Returns a changed ticket list like this [[ticket, name, age], [ticket, name, age]] ect. (Gabe's Section)
 def ticket_UI(ticket_list):
-    print('\033c') # clears terminal
 
     # While true ensures the user inputs a correct option, and runs each function which changes the ticket information
     while True:
@@ -160,9 +159,8 @@ def ticket_UI(ticket_list):
   3. Remove a Ticket''')
         option = input(' --->  ')
 
-        print('\033c')
         if option == '1':
-            ticket_list = ticket_search(ticket_list)
+            ticket_list = ticket_add(ticket_list)
 
         elif option == '2':
             ticket_list = ticket_search(ticket_list,'change')
@@ -358,7 +356,6 @@ def venue_management(): #A sort of sub-main function that contains a user interf
 
 # Matthew McKinley, Time Management
 
-currentTimes = ()
 currentTimeframes = []
 schedule = []
 
@@ -366,6 +363,10 @@ clearTimeframes = []
 
 performances = []
 unclearTimeframes = []
+
+
+
+
 
 days = 0
 dayCount = 0
@@ -377,26 +378,34 @@ def print_timetable():
 
         print(f"{timeFrame} - {performance['Artist']['name']}'s {performance['Artist']['genre']} performance")
 
-def update_current_times(timeframes, startTime, endTime):
+def update_current_times(timeframes, dayStart, dayEnd, clearTimeframes, schedule):
     # timeframes is half hour segments
     # timeframeCount is a countable version of timeframes
 
     timeframeCount = timeframes
-    timeNow = startTime
-    timeNowHour = round(startTime)
+    timeNow = dayStart
+    timeNowHour = int(dayStart)
 
-    currentTimes = currentTimes + timeNow
-    currentTimes = currentTimes + timeNowHour
-
-    while timeNow <= endTime:
+    times = []
+    fixedTimes = []
+    fixedTimes = times.append(timeNow)
+    fixedTimes = times.append(timeNowHour)
+    times.append(fixedTimes)
+    clearTimeframes.append(times)
+    """
+    clearTimeframes = clearTimeframes.append(timeNow)
+    clearTimeframes = clearTimeframes.append(timeNowHour)
+    clearTimeframes.sort()
+    print(clearTimeframes)
+    """
+    while timeNow <= dayEnd:
         remainder = timeframeCount % 2
         if remainder == 1:
-            timeNowHour = timeNowHour + 1
+            timeNowHour += 1
         elif remainder == 0:
-            timeNow = timeNow + .30
+            timeNow += 0.30
     
-    schedule = schedule + timeNow
-    schedule = schedule + timeNowHour
+    schedule.extend([timeNow, timeNowHour])
     schedule = sorted(schedule)
     clearTimeframes = schedule
     return clearTimeframes, schedule
@@ -407,9 +416,9 @@ def modify_festival_length():
         dayEnd = float(input("What time does the day end? (Minutes are after a decimal point, ex 12.30)"))
         timeframes = dayEnd - dayStart
         timeframes = timeframes / 2
-        currentTimeframes = currentTimeframes.append(timeframes)
-        update_current_times(timeframes, dayStart, dayEnd)
-
+        currentTimeframes.append(timeframes)
+        update_current_times(timeframes, dayStart, dayEnd, clearTimeframes, schedule)
+    return dayStart, dayEnd
 def performancesInDay(startTime, endTime):
     performInDay = int(input("How many performances are in this day?"))
 
@@ -433,7 +442,7 @@ def performancesInDay(startTime, endTime):
         if nowTime in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]:
             clearTimeframes.remove(nowTime)
             unclearTimeframes.append(nowTime)
-            nowTime = nowTime + .30
+            nowTime += 0.30
             if nowTime == endTime:
                 continue
         elif nowTime in [1.30, 2.30, 3.30, 4.30, 5.30, 6.30, 7.30, 8.30, 9.30, 10.30, 11.30, 12.30, 13.30, 14.30, 15.30, 16.30, 17.30, 18.30, 19.30, 20.30, 21.30, 22.30, 23.30]:
@@ -442,6 +451,9 @@ def performancesInDay(startTime, endTime):
             nowTime = round(nowTime)
             nowTime = nowTime + 1
         performInDay -= 1
+    return clearTimeframes, unclearTimeframes, startTime, endTime
+
+
 
 # Darius Vaiaoga, Artist Management 
 
@@ -453,13 +465,13 @@ def print_artists():
             for property in artist:
                 print(f'{property.capitalize()}: {artist[property]}')
     else:
-        input('Sorry, there seems to be no artists!')
+        print('Sorry, there seems to be no artists!')
     
 
 def add_artist():
 
-    prompts = ['Who is the artist? ', 'What genre is the performance? ', 'How long will the performance go (in 30 minute blocks)? ']
-    sample_artist = {'name': '', 'genre': ''}
+    prompts = ['Who is the artist? ', 'What genre is the performance? ', 'How long is their performance (in minutes)? ']
+    sample_artist = {'name': '', 'genre': '', 'performance length': ''}
 
     i = 0
 
@@ -506,16 +518,13 @@ def modify_artist():
 
     prop_to_mod = input("What property do you want to modify? ").lower()
 
-    if prop_to_mod != 'name' or 'genre':
+    if prop_to_mod not in ['name', 'genre', 'performance length']:
         input("That property doesn't exist")
         return None
 
     # Ask user what they want to change the property to. If the property is the performance duration, convert answer to integer
     try:
-        if prop_to_mod != "performance_duration":
-            artist[prop_to_mod] = input(f'What do you want to change "{prop_to_mod.capitalize()}" to? ')
-        else:
-            artist[prop_to_mod] = int(input(f'What do you want to change "{prop_to_mod.capitalize()}" to? '))
+        artist[prop_to_mod] = input(f'What do you want to change "{prop_to_mod.capitalize()}" to? ')
     except:
         input('Invalid Input')
         return None
@@ -529,15 +538,18 @@ def create_search_list():
     search_list.clear()
 
     for artist in artist_list:
-        search_list.append({'Type': 'Artist', 'info': artist})
+        search_list.append({'type': 'artist', 'info': artist})
 
     # Seperates Venues, from stages, from equipment, in search list
     for venue in venues:
-        search_list.append({'Type': 'Venue', 'info': venue})
+        search_list.append({'type': 'venue', 'info': venue})
         for stage in venue['stage']:
-            search_list.append({'Type': 'Stage', 'info': stage})
+            search_list.append({'type': 'stage', 'info': stage})
             for equipment in stage['equipment']:
                 search_list.append({'Type': 'Equipment', 'info': equipment})
+    
+    for attendee in attendee_list:
+        search_list.append({'type': 'attendee', 'info': attendee})
 
     
             
@@ -550,14 +562,14 @@ def search():
     create_search_list()
 
     for item in search_list:
-        match item['Type']:
-            case 'Artist':
+        match item['type']:
+            case 'artist':
 
                 # Checks if first two letters of artist name is the same as the first two letters of the query
                 if [item['info']['name'][0].lower(), item['info']['name'][1].lower()] == [query[0], query[1]]:
                     print('Artist:')
                     print_result(item['info'])
-            case 'Venue':
+            case 'venue':
 
                 # Checks if first two letters of venue name is the same as the first two letters of the query
                 if [item['info']['name'][0].lower(), item['info']['name'][1].lower()] == [query[0], query[1]]:
@@ -565,23 +577,29 @@ def search():
                     print('Venue:')
                     display_venues([item['info']])
 
-            case 'Stage':
+            case 'stage':
                 
                 if [item['info']['name'][0].lower(), item['info']['name'][1].lower()] == [query[0], query[1]]:
 
                     # Print Stage's name and equipment
                     print('Stage:')
-                    print(f'Stage Name: {item['info']['name']}')
+                    print(f'Name: {item['info']['name']}')
                     for equipment in item['info']['equipment']:
                         print(f"\t{equipment['count']} {equipment['name']}s")
 
-            case 'Equipment':
+            case 'equipment':
 
                 if [item['info']['name'][0].lower(), item['info']['name'][1].lower()] == [query[0], query[1]]:
 
                     # Print equipment's name and
                     print('Equipment:')
-                    print(f"\t{item['info']['count']} {item['info']['name']}s")            
+                    print(f"\t{item['info']['count']} {item['info']['name']}s")    
+
+            case 'attendee':
+                print('Attendee:')
+                print_result(item['info'])  
+
+    input('Done Reading? ')
 
 # Jonas Fairchild, Master display and Main function
 
@@ -592,20 +610,21 @@ def display_all(): #Uses a combination of display functions from every part of t
     print("\n---------- Venues ----------\n")
     display_venues(venues)
     print("\n---------- Tickets/attendees ----------\n")
+    ticket_display(attendee_list)
 
     input('Done Reading? ')
 
 def time_menu():
     while True:
         print('"---------- Time ----------')
-        match input('What do you want to do with time? \n1. See Time Table \n2. Modify Festival Hours \n3. Set Performances \n6. Go Back'):
+        match input('What do you want to do with time? \n1. See Time Table \n2. Modify Festival Hours \n3. Set Performances \n4. Go Back'):
             case '1':
                 print_timetable()
             case '2':
                 modify_festival_length()
             case '3':
                 performancesInDay()
-            case '6':
+            case '4':
                 main()
                 break
             case _:
@@ -628,9 +647,13 @@ def artist_menu():
                 break
             case _:
                 input('Invalid Input')
-                
+            
 
 def main(): #Provides a UI that branches to every part of the program, allowing modification of everything.
+    ticket_list = []
+
+    input('-~-~-~-~-~-~-~-MUSIC FESTIVAL MANAGER-~-~-~-~-~-~-~-\n')
+
     while True:
         choice = input("What do you want to do?\n1. Manage artists\n2. Manage schedule\n3. Manage venues\n4. Manage ticket sales/attendees\n5. Display everything\n6. Search\n7. Exit program\n")
         if choice == '1':
@@ -640,13 +663,13 @@ def main(): #Provides a UI that branches to every part of the program, allowing 
         elif choice == '3':
             venues = venue_management()
         elif choice == '4':
-            pass
+            ticket_list = ticket_UI(ticket_list)
         elif choice == '5':
             display_all()
         elif choice == '6':
             search()
         elif choice == '7':
-            break
+            exit()
         else:
             print("That isn't on the list of options. Try again.")
 
