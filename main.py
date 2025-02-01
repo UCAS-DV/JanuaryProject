@@ -1,7 +1,7 @@
 
 #Music Festival Management System
 
-# Darius Vaiaoga, Artist Management
+# Darius Vaiaoga, Artist Management 
 
 artist_list = []
 
@@ -277,7 +277,6 @@ performances = []
 
 days = 0
 dayCount = 0
-dayStart
 
 # Prints out filled time frames with the performances happening then 
 def print_timetable():
@@ -351,6 +350,12 @@ def performancesInDay(startTime, endTime):
             nowTime = round(nowTime)
             nowTime = nowTime + 1
         performInDay -= 1
+
+# Darius Vaiaoga, Search Functions
+
+
+
+    
 
 #Jonas Fairchild, Master display and Main function
 
