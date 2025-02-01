@@ -364,9 +364,7 @@ clearTimeframes = []
 performances = []
 unclearTimeframes = []
 
-
-
-
+totalTimes = (1, 1.30, 2, 2.30, 3, 3.30, 4, 4.30, 5, 5.30, 6, 6.30, 7, 7.30, 8, 8.30, 9, 9.30, 10, 10.30, 11, 11.30, 12, 12.30, 13, 13.30, 14, 14.30, 15, 15.30, 16, 16.30, 17, 17.30, 18, 18.30, 19, 19.30, 20, 20.30, 21, 21.30, 22, 22.30, 23, 23.30)
 
 days = 0
 dayCount = 0
@@ -419,7 +417,7 @@ def modify_festival_length():
         currentTimeframes.append(timeframes)
         update_current_times(timeframes, dayStart, dayEnd, clearTimeframes, schedule)
     return dayStart, dayEnd
-def performancesInDay(startTime, endTime):
+def performancesInDay():
     performInDay = int(input("How many performances are in this day?"))
 
     sample_performance = {'Artist': {}, 'Start Time': 1.30, 'End Time': 2.30}
@@ -432,8 +430,8 @@ def performancesInDay(startTime, endTime):
             input("Couldn't find artist")
             break
 
-        startTime = float(input("What time do you want the performance to start? (military time with minutes after a decimal, Ex. 16.30 is 4:30 PM)"))
-        endTime = float(input("What time do you want the performance to end? (military time with minutes after a decimal, Ex. 16.30 is 4:30 PM)"))
+        startTime = float(input("What time do you want the performance to start? (Starts on an hour)"))
+        endTime = float(input("What time do you want the performance to end? (Starts on an hour)"))
         nowTime = startTime
 
         sample_performance['Start Time'] = startTime
@@ -452,8 +450,6 @@ def performancesInDay(startTime, endTime):
             nowTime = nowTime + 1
         performInDay -= 1
     return clearTimeframes, unclearTimeframes, startTime, endTime
-
-
 
 # Darius Vaiaoga, Artist Management 
 
