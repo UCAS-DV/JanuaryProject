@@ -156,7 +156,8 @@ def ticket_UI(ticket_list):
         print('''Please select a ticket option (Choose a number 1-3):
   1. Add a Ticket
   2. Change a Ticket
-  3. Remove a Ticket''')
+  3. Remove a Ticket
+  4. Display Tickets''')
         option = input(' --->  ')
 
         if option == '1':
@@ -167,9 +168,13 @@ def ticket_UI(ticket_list):
 
         elif option == '3':
             ticket_list = ticket_search(ticket_list,'remove')
+        
+        elif option == '4':
+            ticket_display(attendee_list)
+            input("Done reading?: ")
 
         else:
-            print('\033cThat was not a valid option please try again!\n')
+            print('\033cThat was not a valid option, please try again!')
             continue
         return ticket_list # returns ticket list to main function for usage later
 
@@ -363,104 +368,6 @@ def venue_management(): #A sort of sub-main function that contains a user interf
             print("That's not an integer. Try again.")
             input("Done reading?: ")
 
-
-# Matthew McKinley, Time Management
-
-currentTimeframes = []
-schedule = []
-
-clearTimeframes = []
-
-performances = []
-unclearTimeframes = []
-
-totalTimes = (1, 1.30, 2, 2.30, 3, 3.30, 4, 4.30, 5, 5.30, 6, 6.30, 7, 7.30, 8, 8.30, 9, 9.30, 10, 10.30, 11, 11.30, 12, 12.30, 13, 13.30, 14, 14.30, 15, 15.30, 16, 16.30, 17, 17.30, 18, 18.30, 19, 19.30, 20, 20.30, 21, 21.30, 22, 22.30, 23, 23.30)
-
-days = 0
-dayCount = 0
-
-# Prints out filled time frames with the performances happening then 
-def print_timetable():
-    for timeFrame in unclearTimeframes:
-        performance = performances[unclearTimeframes.index(timeFrame)]
-
-        print(f"{timeFrame} - {performance['Artist']['name']}'s {performance['Artist']['genre']} performance")
-
-def update_current_times(timeframes, dayStart, dayEnd, clearTimeframes, schedule):
-    # timeframes is half hour segments
-    # timeframeCount is a countable version of timeframes
-
-    timeframeCount = timeframes
-    timeNow = dayStart
-    timeNowHour = int(dayStart)
-
-    times = []
-    fixedTimes = []
-    fixedTimes = times.append(timeNow)
-    fixedTimes = times.append(timeNowHour)
-    times.append(fixedTimes)
-    clearTimeframes.append(times)
-    """
-    clearTimeframes = clearTimeframes.append(timeNow)
-    clearTimeframes = clearTimeframes.append(timeNowHour)
-    clearTimeframes.sort()
-    print(clearTimeframes)
-    """
-    while timeNow <= dayEnd:
-        remainder = timeframeCount % 2
-        if remainder == 1:
-            timeNowHour += 1
-        elif remainder == 0:
-            timeNow += 0.30
-    
-    schedule.extend([timeNow, timeNowHour])
-    schedule = sorted(schedule)
-    clearTimeframes = schedule
-    return clearTimeframes, schedule
-
-def modify_festival_length():
-    if days >= dayCount:
-        dayStart = int(input("What time does the day start? (Make it an hour, no minutes)"))
-        dayEnd = float(input("What time does the day end? (Minutes are after a decimal point, ex 12.30)"))
-        timeframes = dayEnd - dayStart
-        timeframes = timeframes / 2
-        currentTimeframes.append(timeframes)
-        update_current_times(timeframes, dayStart, dayEnd, clearTimeframes, schedule)
-    return dayStart, dayEnd
-def performancesInDay():
-    performInDay = int(input("How many performances are in this day?"))
-
-    sample_performance = {'Artist': {}, 'Start Time': 1.30, 'End Time': 2.30}
-
-    while performInDay >= 1:
-        
-        try:
-            sample_performance['Artist'] = artist_list[get_artist()]
-        except:
-            input("Couldn't find artist")
-            break
-
-        startTime = float(input("What time do you want the performance to start? (Starts on an hour)"))
-        endTime = float(input("What time do you want the performance to end? (Starts on an hour)"))
-        nowTime = startTime
-
-        sample_performance['Start Time'] = startTime
-        sample_performance['End Time'] = endTime
-
-        if nowTime in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]:
-            clearTimeframes.remove(nowTime)
-            unclearTimeframes.append(nowTime)
-            nowTime += 0.30
-            if nowTime == endTime:
-                continue
-        elif nowTime in [1.30, 2.30, 3.30, 4.30, 5.30, 6.30, 7.30, 8.30, 9.30, 10.30, 11.30, 12.30, 13.30, 14.30, 15.30, 16.30, 17.30, 18.30, 19.30, 20.30, 21.30, 22.30, 23.30]:
-            clearTimeframes.remove(nowTime)
-            unclearTimeframes.append(nowTime)
-            nowTime = round(nowTime)
-            nowTime = nowTime + 1
-        performInDay -= 1
-    return clearTimeframes, unclearTimeframes, startTime, endTime
-
 # Darius Vaiaoga, Artist Management 
 
 artist_list = []
@@ -530,6 +437,166 @@ def modify_artist():
             print('Invalid Input')
     else:
         print("Sorry, there seems to be no artists!")
+
+def artist_menu():
+    while True:
+        os.system("cls")
+        match input('What do you want to do with the artists? \n1. See Artists \n2. Add Artist \n3. Remove Artist \n4. Modify Artist \n5. Go Back \n'):
+            case '1':
+                print_artists()
+            case '2':
+                add_artist()
+            case '3':
+                remove_artist()
+            case '4':
+                modify_artist()
+            case '5':
+                main()
+                break
+            case _:
+                print('Invalid Input. Try again.')
+        input("Done reading?: ")
+
+# Matthew McKinley, Time Management
+
+schedule = ()
+
+def schedule_add(schedule):
+    if artist_list:
+        try: #Gets the artist the user wants to add
+            artist = artist_list[get_artist()]
+        except:
+            print("Couldn't find artist.")
+            return schedule
+    else:
+        print("Sorry, there seems to be no artists!")
+        return schedule
+    
+    
+    if venue_names: #Gets the location the artist will perform at
+        while True: 
+            print("What venue will the artist perform at?")
+            for name in venue_names:
+                print(f"-{name}", end="\n")
+            venue_name = input()
+            if venue_name not in venue_names:
+                print("That's not a venue. Try again.")
+            else:
+                break
+        venue = next((v for v in venues if v['name'].lower() == venue_name.lower()), []) #Specifies the venue that the name references
+        if venue['stage']:
+            while True: 
+                print("What stage will the artist perform at?")
+                for stage in venue['stage']:
+                    print(f"-{stage['name']}", end="\n")
+                stage_name = input()
+                if stage_name not in stage_names:
+                    print("That's not a stage. Try again.")
+                else:
+                    break
+        else:
+            print("There are no stages at that venue to host performances at.")
+            return schedule
+    else:
+        print("There are no venues to host performances at.")
+        return schedule
+    
+    while True: #Gets the day the artist will perform on
+        try:
+            day = int(input("What day of the festival will the artist perform on?: "))
+            if day < 0:
+                print("Invalid input. Try again.")
+            else:
+                break
+        except:
+            print("Invalid input. Try again.")
+    
+    while True: #Gets the time the artist will perform at
+        try:
+            time_start = float(input("What time will the artist perform at? (military time, hour.min, must be on an hour or half-hour): "))
+            if round(13.3 % 1, 3) != 0 or round(13.3 % 1, 3) != 0.3:
+                if time_start > 24.3:
+                    print("That's not a valid time. Try again.")
+                else:
+                    break
+            else:
+                print("That's not on an hour/half hour. Try again.")
+        except:
+            print("Invalid input. Try again.")
+    
+    
+    while True: #Gets the the length/end time of the artist's performance
+        try:
+            length = int(input("How many 30 minute timeslots will the artist take up?: "))
+            if length < 0:
+                print("That's not a valid length. Try again.")
+            else:
+                time_end = time_start + length // 2
+                if length % 2 != 0:
+                    if round(time_end % 1, 3) != 0:
+                        time_end += 0.7
+                    else:
+                        time_end += 0.3
+                break  
+        except:
+            print("Invalid input. Try again.")
+    
+    #Makes sure that there are no overlaps in scheduling
+    new_booking = {'artist': artist["name"], 'venue': venue_name, 'stage': stage_name, 'day': day, 'start_time': time_start, 'end_time': time_end}
+    for booking in schedule:
+        if booking['artist'] == new_booking['artist'] and booking['venue'] != new_booking['venue'] and booking['stage'] != new_booking['stage'] and booking['day'] == new_booking['day']:
+            if not (new_booking['end_time'] <= booking['start_time'] or new_booking['start_time'] >= booking['end_time']):
+                print("An artist is double-booked! The booking has been aborted.")
+                return schedule
+        if booking['venue'] == new_booking['venue'] and booking['stage'] == new_booking['stage'] and booking['day'] == new_booking['day']:
+            if not (new_booking['end_time'] <= booking['start_time'] or new_booking['start_time'] >= booking['end_time']):
+                print("Two artists are booked at the same place at the same time! The booking has been aborted.")
+                return schedule
+    print("The artist has been successfully booked.")
+    schedule = list(schedule)
+    schedule.append(new_booking)
+    return tuple(schedule)
+
+def schedule_remove(schedule):
+    if schedule:
+        print("Which booking do you want to remove?: ")
+        for booking in schedule:
+            print(f"-{booking['artist']}, at {booking['stage']} at {booking['start_time']} on day {booking['day']}")
+        artist = input("Artist?: ")
+        stage = input("Stage?: ")
+        time = input("Time?: ")
+        day = input("Day?: ")
+        for booking in schedule:
+            if booking['artist'] == artist and booking['time'] == time and booking['stage'] == stage and booking['day'] == day:
+                schedule = list(schedule)
+                schedule.remove(booking)
+        return tuple(schedule)
+    else:
+        print("There's nothing to remove.")
+        return schedule
+
+def schedule_display(schedule):
+    if schedule:
+        for booking in schedule:
+            print(f"Artist: {booking['artist']}\nVenue: {booking['venue']}\nStage: {booking['stage']}\nDay: {booking['day']}\nStart time: {booking['start_time']}\nEnd time: {booking['end_time']}\n", end= "\n")
+    else:
+        print("Nothing is on the schedule.")
+
+def time_menu(schedule):
+    while True:
+        os.system('cls')
+        match input('What do you want to do with the schedule? \n1. Add a booking\n2. Remove a booking\n3. Display all bookings\n4. Go Back\n'):
+            case '1':
+                schedule = schedule_add(schedule)
+            case '2':
+                schedule = schedule_remove(schedule)
+            case '3':
+                schedule_display(schedule)
+            case '4':
+                return schedule
+            case _:
+                input('Invalid Input')
+        input("Done reading?: ")
 
 # Darius Vaiaoga, Search Functions
 
@@ -605,68 +672,35 @@ def search():
 
 # Jonas Fairchild, Master display and Main function
 
-def display_all(): #Uses a combination of display functions from every part of the code to display everything imaginable.
+def display_all(schedule): #Uses a combination of display functions from every part of the code to display everything imaginable.
     print("---------- Artists ----------\n")
     print_artists()
     print("\n---------- Schedule ----------\n")
+    schedule_display(schedule)
     print("\n---------- Venues ----------\n")
     display_venues()
     print("\n---------- Tickets/attendees ----------\n")
     ticket_display(attendee_list)
+    print()
 
     input('Done Reading? ')
 
-def time_menu():
-    while True:
-        os.system('cls')
-        match input('What do you want to do with time? \n1. See Time Table \n2. Modify Festival Hours \n3. Set Performances \n4. Go Back'):
-            case '1':
-                print_timetable()
-            case '2':
-                modify_festival_length()
-            case '3':
-                performancesInDay()
-            case '4':
-                main()
-                break
-            case _:
-                input('Invalid Input')
-
-def artist_menu():
-    while True:
-        os.system("cls")
-        match input('What do you want to do with the artists? \n1. See Artists \n2. Add Artist \n3. Remove Artist \n4. Modify Artist \n5. Go Back \n'):
-            case '1':
-                print_artists()
-            case '2':
-                add_artist()
-            case '3':
-                remove_artist()
-            case '4':
-                modify_artist()
-            case '5':
-                main()
-                break
-            case _:
-                print('Invalid Input. Try again.')
-        input("Done reading?: ")
-            
-
 def main(): #Provides a UI that branches to every part of the program, allowing modification of everything.
     ticket_list = []
+    schedule = ()
     while True:
         os.system("cls")
         choice = input("What do you want to do?\n1. Manage artists\n2. Manage schedule\n3. Manage venues\n4. Manage ticket sales/attendees\n5. Display everything\n6. Search\n7. Exit program\n")
         if choice == '1':
             artist_menu()
         elif choice == '2':
-            time_menu()
+            schedule = time_menu(schedule)
         elif choice == '3':
             venues, venue_names, stage_names, equipment_names = venue_management()
         elif choice == '4':
             ticket_list = ticket_UI(ticket_list)
         elif choice == '5':
-            display_all()
+            display_all(schedule)
         elif choice == '6':
             search()
         elif choice == '7':
