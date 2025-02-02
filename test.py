@@ -340,7 +340,7 @@ def display_venues(): #Shows all venues in an organized manner.
 
 def venue_management(): #A sort of sub-main function that contains a user interface for this smaller part of the program.
     while True:
-        os.system("cls")
+        
         try:
             choice = int(input("What do you want to do?\n1. Add/Remove a venue\n2. Add/Remove a stage\n3. Add/Remove equipment\n4. Display all venues/stages/equipment\n5. Exit venue management\n"))
             if choice == 1:
@@ -363,6 +363,8 @@ def venue_management(): #A sort of sub-main function that contains a user interf
         except:
             print("That's not an integer. Try again.")
             input("Done reading?: ")
+
+        os.system("cls")
 
 
 # Matthew McKinley, Time Management
@@ -474,9 +476,7 @@ def print_artists():
     else:
         print('Sorry, there seems to be no artists!')
     
-
 def add_artist():
-
     prompts = ['Who is the artist? ', 'What genre is the performance? ', 'How long is their performance (in minutes)? ']
     sample_artist = {'name': '', 'genre': '', 'performance length': ''}
 
@@ -543,14 +543,15 @@ def create_search_list():
     for artist in artist_list:
         search_list.append({'type': 'artist', 'info': artist})
 
-    # Seperates Venues, from stages, from equipment, in search list
-    for venue in venues:
-        search_list.append({'type': 'venue', 'info': venue})
-        for stage in venue['stage']:
-            search_list.append({'type': 'stage', 'info': stage})
-            for equipment in stage['equipment']:
-                search_list.append({'Type': 'Equipment', 'info': equipment})
-    
+    for venue_name in venue_names:
+        search_list.append({'type': 'venue', 'info': venue_name})
+
+    for stage_name in stage_names:
+        search_list.append({'type': 'stage', 'info': stage_name})
+
+    for equipment_name in equipment_names:
+        search_list.append({'type': 'equipment', 'info': equipment_name})   
+
     for attendee in attendee_list:
         search_list.append({'type': 'attendee', 'info': attendee})
 
@@ -564,6 +565,8 @@ def search():
     query = input('What do you want to search for? ').lower()
     create_search_list()
 
+    os.system('cls')
+
     for item in search_list:
         match item['type']:
             case 'artist':
@@ -572,35 +575,32 @@ def search():
                 if [item['info']['name'][0].lower(), item['info']['name'][1].lower()] == [query[0], query[1]]:
                     print('Artist:')
                     print_result(item['info'])
+
             case 'venue':
 
                 # Checks if first two letters of venue name is the same as the first two letters of the query
-                if [item['info']['name'][0].lower(), item['info']['name'][1].lower()] == [query[0], query[1]]:
-
+                if [item['info'][0].lower(), item['info'][1].lower()] == [query[0], query[1]]:
                     print('Venue:')
-                    display_venues([item['info']])
+                    print(item['info'])
 
             case 'stage':
-                
-                if [item['info']['name'][0].lower(), item['info']['name'][1].lower()] == [query[0], query[1]]:
 
-                    # Print Stage's name and equipment
+                # Checks if first two letters of venue name is the same as the first two letters of the query
+                if [item['info'][0].lower(), item['info'][1].lower()] == [query[0], query[1]]:
                     print('Stage:')
-                    print(f"Name: {item['info']['name']}")
-                    for equipment in item['info']['equipment']:
-                        print(f"\t{equipment['count']} {equipment['name']}s")
-
+                    print(item['info'])
+            
             case 'equipment':
 
-                if [item['info']['name'][0].lower(), item['info']['name'][1].lower()] == [query[0], query[1]]:
-
-                    # Print equipment's name and
+                # Checks if first two letters of venue name is the same as the first two letters of the query
+                if [item['info'][0].lower(), item['info'][1].lower()] == [query[0], query[1]]:
                     print('Equipment:')
-                    print(f"\t{item['info']['count']} {item['info']['name']}s")    
+                    print(item['info'])
 
             case 'attendee':
-                print('Attendee:')
-                print_result(item['info'])  
+                if [item['info']['name'][0].lower(), item['info']['name'][1].lower] == [query[0], query[1]]:
+                    print('Attendee:')
+                    print_result(item['info'])  
 
     input('Done Reading? ')
 
@@ -635,7 +635,7 @@ def time_menu():
 
 def artist_menu():
     while True:
-        os.system("cls")
+        
         match input('What do you want to do with the artists? \n1. See Artists \n2. Add Artist \n3. Remove Artist \n4. Modify Artist \n5. Go Back \n'):
             case '1':
                 print_artists()
@@ -651,12 +651,12 @@ def artist_menu():
             case _:
                 print('Invalid Input. Try again.')
         input("Done reading?: ")
+        os.system("cls")
             
 
 def main(): #Provides a UI that branches to every part of the program, allowing modification of everything.
     ticket_list = []
     while True:
-        os.system("cls")
         choice = input("What do you want to do?\n1. Manage artists\n2. Manage schedule\n3. Manage venues\n4. Manage ticket sales/attendees\n5. Display everything\n6. Search\n7. Exit program\n")
         if choice == '1':
             artist_menu()
@@ -671,9 +671,10 @@ def main(): #Provides a UI that branches to every part of the program, allowing 
         elif choice == '6':
             search()
         elif choice == '7':
-            break
+            exit()
         else:
             print("That isn't on the list of options. Try again.")
             input("Done reading?: ")
+        os.system("cls")
         
 main()
