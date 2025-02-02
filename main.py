@@ -383,8 +383,8 @@ def print_artists():
 
 def add_artist():
 
-    prompts = ['Who is the artist? ', 'What genre is the performance? ', 'How long is their performance (in minutes)? ']
-    sample_artist = {'name': '', 'genre': '', 'performance length': ''}
+    prompts = ['Who is the artist? ', 'What genre is the performance? ']
+    sample_artist = {'name': '', 'genre': ''}
 
     i = 0
 
@@ -609,18 +609,20 @@ def create_search_list():
     for artist in artist_list:
         search_list.append({'type': 'artist', 'info': artist})
 
-    # Seperates Venues, from stages, from equipment, in search list
-    for venue in venues:
-        search_list.append({'type': 'venue', 'info': venue})
-        for stage in venue['stage']:
-            search_list.append({'type': 'stage', 'info': stage})
-            for equipment in stage['equipment']:
-                search_list.append({'Type': 'Equipment', 'info': equipment})
+    for venue_name in venue_names:
+        search_list.append({'type': 'venue', 'info': venue_name})
+
+    for stage_name in stage_names:
+        search_list.append({'type': 'venue', 'info': stage_name})
+
+    for equipment_name in equipment_names:
+        search_list.append({'type': 'venue', 'info': equipment_name})
     
     for attendee in attendee_list:
         search_list.append({'type': 'attendee', 'info': attendee})
 
-    
+    for timeslot in schedule:
+        search_list.append({'type': 'timeslot', 'info': timeslot})
             
 def print_result(result):
     for property in result:
@@ -638,35 +640,40 @@ def search():
                 if [item['info']['name'][0].lower(), item['info']['name'][1].lower()] == [query[0], query[1]]:
                     print('Artist:')
                     print_result(item['info'])
+
             case 'venue':
 
                 # Checks if first two letters of venue name is the same as the first two letters of the query
-                if [item['info']['name'][0].lower(), item['info']['name'][1].lower()] == [query[0], query[1]]:
+                if [item['info'][0].lower(), item['info'][1].lower()] == [query[0], query[1]]:
 
                     print('Venue:')
-                    display_venues([item['info']])
+                    print(item['info'])
 
             case 'stage':
                 
-                if [item['info']['name'][0].lower(), item['info']['name'][1].lower()] == [query[0], query[1]]:
+                if [item['info'][0].lower(), item['info'][1].lower()] == [query[0], query[1]]:
 
                     # Print Stage's name and equipment
                     print('Stage:')
-                    print(f"Name: {item['info']['name']}")
-                    for equipment in item['info']['equipment']:
-                        print(f"\t{equipment['count']} {equipment['name']}s")
+                    print(f"{item['info']}")
 
             case 'equipment':
 
-                if [item['info']['name'][0].lower(), item['info']['name'][1].lower()] == [query[0], query[1]]:
+                if [item['info'][0].lower(), item['info'][1].lower()] == [query[0], query[1]]:
 
-                    # Print equipment's name and
+                    # Print equipment's name
                     print('Equipment:')
-                    print(f"\t{item['info']['count']} {item['info']['name']}s")    
+                    print(f"{item['info']}s")    
 
             case 'attendee':
-                print('Attendee:')
-                print_result(item['info'])  
+                if [item['info']['Name'][0].lower(), item['info']['Name'][1].lower()] == [query[0], query[1]]:
+                    print('Attendee:')
+                    print_result(item['info'])  
+
+            case 'schedule':
+                if [item['info']['artist'][0].lower(), item['info']['artist'][1].lower()] == [query[0], query[1]]:
+                    print('Performance:')
+                    schedule_display([item['info']])
 
     input('Done Reading? ')
 
@@ -696,7 +703,7 @@ def main(): #Provides a UI that branches to every part of the program, allowing 
         elif choice == '2':
             schedule = time_menu(schedule)
         elif choice == '3':
-            venues, venue_names, stage_names, equipment_names = venue_management()
+            venues = venue_management()
         elif choice == '4':
             ticket_list = ticket_UI(ticket_list)
         elif choice == '5':
@@ -704,7 +711,7 @@ def main(): #Provides a UI that branches to every part of the program, allowing 
         elif choice == '6':
             search()
         elif choice == '7':
-            break
+            exit()
         else:
             print("That isn't on the list of options. Try again.")
             input("Done reading?: ")
