@@ -179,6 +179,9 @@ def ticket_UI(ticket_list):
 
 import os
 venues = []
+venue_names = set()
+stage_names = set()
+equipment_names = set()
 
 def venue_modify(): #Handles all modification for all venues.
     choice = input("Do you want to add or remove a venue?: ").lower()
@@ -191,9 +194,10 @@ def venue_modify(): #Handles all modification for all venues.
             removal = input().lower()
             for venue in venues:
                 if venue["name"].lower() == removal:
+                    venue_names.remove(venue['name'])                    
                     venues.remove(venue) #Removes the venue from the list
                     print("Successfully removed venue.")
-                    return venues 
+                    return venues, venue_names, stage_names, equipment_names
             print("That venue isn't on the list.")
         else:
             print("There are no venues to remove.")
@@ -202,6 +206,7 @@ def venue_modify(): #Handles all modification for all venues.
         venue_name = input("What is the name of your venue?: ")
         if not any(v["name"].lower() == venue_name.lower() for v in venues): #Avoids duplicates
             venues.append({"name": venue_name, "stage": []}) #Adds the venue to the list
+            venue_names.add(venue_name)
             print(f"Venue successfully added.")
         else:
             print("That venue already exists.")
@@ -210,7 +215,7 @@ def venue_modify(): #Handles all modification for all venues.
         print("Invalid input. Try again.")
         return venue_modify()
 
-    return venues
+    return venues, venue_names, stage_names, equipment_names
 
 def stage_modify(): #Handles the modification for the stages within each venue.
     if venues:
@@ -233,9 +238,10 @@ def stage_modify(): #Handles the modification for the stages within each venue.
                 removal = input().lower()
                 for stage in venue['stage']:
                     if stage["name"].lower() == removal:
+                        stage_names.remove(stage['name'])
                         venue['stage'].remove(stage) #Removes the stage from the list
                         print("Successfully removed stage.")
-                        return venues 
+                        return venues, venue_names, stage_names, equipment_names
                 print("That stage isn't on the list.")
             else:
                 print("There are no stages to remove.")
@@ -244,6 +250,7 @@ def stage_modify(): #Handles the modification for the stages within each venue.
             stage_name = input("What is the name of your stage?: ")
             if not any(s["name"].lower() == stage_name.lower() for s in venue['stage']): #Avoids duplicates
                 venue['stage'].append({"name": stage_name, "equipment": []}) #Adds the stage to the list
+                stage_names.add(stage_name)
                 print(f"Stage successfully added.")
             else:
                 print("That stage already exists.")
@@ -254,7 +261,7 @@ def stage_modify(): #Handles the modification for the stages within each venue.
     else:
         print("There are no venues to put stages at.")
 
-    return venues
+    return venues, venue_names, stage_names, equipment_names
 
 def equipment_modify(): #Handles the modification for the equipment lists for each stage.
     if venues:
@@ -287,9 +294,10 @@ def equipment_modify(): #Handles the modification for the equipment lists for ea
                 removal = input().lower()
                 for equipment in stage['equipment']:
                     if equipment["name"].lower() == removal:
+                        equipment_names.remove(equipment['name'])
                         stage['equipment'].remove(equipment) #Removes the equipment from the list
                         print("Successfully removed equipment.")
-                        return venues 
+                        return venues, venue_names, stage_names, equipment_names 
                 print("That stage isn't on the list.")
             else:
                 print("There is no equipment to remove.")
@@ -305,6 +313,7 @@ def equipment_modify(): #Handles the modification for the equipment lists for ea
 
             if not any(e["name"].lower() == equipment_name.lower() for e in stage['equipment']): #Avoids duplicates
                 stage['equipment'].append({"name": equipment_name, "count": equipment_count}) #Adds the equipment to the list
+                equipment_names.add(equipment_name)
                 print(f"Equipment successfully added.")
             else:
                 print("That equipment already exists.")
@@ -315,7 +324,7 @@ def equipment_modify(): #Handles the modification for the equipment lists for ea
     else:
         print("There are no venues to put stages' equipment lists at.")
 
-    return venues
+    return venues, venue_names, stage_names, equipment_names
 
 def display_venues(): #Shows all venues in an organized manner.
     if venues:
@@ -653,7 +662,7 @@ def main(): #Provides a UI that branches to every part of the program, allowing 
         elif choice == '2':
             time_menu()
         elif choice == '3':
-            venues = venue_management()
+            venues, venue_names, stage_names, equipment_names = venue_management()
         elif choice == '4':
             ticket_list = ticket_UI(ticket_list)
         elif choice == '5':
