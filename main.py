@@ -1,4 +1,4 @@
-# Music Festival Management System
+
 
 # ------------------------------------ START OF GABES CODE ------------------------------------------
 # Displays tickets in a list with each ticket numbered
@@ -171,23 +171,148 @@ def TicketUI(ticket_list):
 
 # ------------------------------------ END OF GABES CODE ------------------------------------------
 
-"""
+
 currentTimes = ()
 currentTimeframes = []
+schedule = []
 
-schedule = ()
+clearTimeframes = []
 
-def updateCurrentTimes():
+days = 0
+dayCount = 0
+
+# Prints out filled time frames with the performances happening then 
+def print_timetable():
+    for timeFrame in unclearTimeframes:
+        performance = performances[unclearTimeframes.index(timeFrame)]
+
+        print(f"{timeFrame} - {performance['Artist']['name']}'s {performance['Artist']['genre']} performance")
+
+def update_current_times(timeframes, startTime, endTime):
+    timeframeCount = timeframes
+    timeNow = startTime
+    timeNowHour = round(startTime)
+
+    currentTimes = currentTimes + timeNow
+    currentTimes = currentTimes + timeNowHour
+
+    while timeNow <= endTime:
+        remainder = timeframeCount % 2
+        if remainder == 1:
+            timeNowHour = timeNowHour + 1
+        elif remainder == 0:
+            timeNow = timeNow + .30
     
+    schedule = schedule + timeNow
+    schedule = schedule + timeNowHour
+    schedule = sorted(schedule)
+    clearTimeframes = schedule
+    return clearTimeframes, schedule
 
-artist_list = [{'name': 'Eminem', 'genre': 'Rap', 'start': schedule[9], 'end': 11.30}]
+def modify_festival_length():
+    if days >= dayCount:
+        dayStart = int(input("What time does the day start? (Make it an hour, no minutes)"))
+        dayEnd = float(input("What time does the day end? (Minutes are after a decimal point, ex 12.30)"))
+        timeframes = dayEnd - dayStart
+        timeframes = timeframes / 2
+        currentTimeframes = currentTimeframes.append(timeframes)
+        update_current_times(timeframes, dayStart, dayEnd)
 
-days = int(input("How many days are you going to have the festival be?:"))
+def performancesInDay(startTime, endTime):
+    performInDay = int(input("How many performances are in this day?"))
 
-def ListArtists():
-    for artist in artist_list:
-        print(f'Name: {artist['name']}')
-        print(f'Genre: {artist['genre']}')
+    sample_performance = {'Artist': {}, 'Start Time': 1.30, 'End Time': 2.30}
 
-ListArtists()
-"""
+    while performInDay >= 1:
+        
+        try:
+            sample_performance['Artist'] = artist_list[get_artist()]
+        except:
+            input("Couldn't find artist")
+            break
+
+        startTime = float(input("What time do you want the performance to start? (military time with minutes after a decimal, Ex. 16.30 is 4:30 PM)"))
+        endTime = float(input("What time do you want the performance to end? (military time with minutes after a decimal, Ex. 16.30 is 4:30 PM)"))
+        nowTime = startTime
+
+        sample_performance['Start Time'] = startTime
+        sample_performance['End Time'] = endTime
+
+        if nowTime in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]:
+            clearTimeframes.remove(nowTime)
+            unclearTimeframes.append(nowTime)
+            nowTime = nowTime + .30
+            if nowTime == endTime:
+                continue
+        elif nowTime in [1.30, 2.30, 3.30, 4.30, 5.30, 6.30, 7.30, 8.30, 9.30, 10.30, 11.30, 12.30, 13.30, 14.30, 15.30, 16.30, 17.30, 18.30, 19.30, 20.30, 21.30, 22.30, 23.30]:
+            clearTimeframes.remove(nowTime)
+            unclearTimeframes.append(nowTime)
+            nowTime = round(nowTime)
+            nowTime = nowTime + 1
+        performInDay -= 1
+
+#Jonas Fairchild, Master display and Main function
+
+def display_all(): #Uses a combination of display functions from every part of the code to display everything imaginable.
+    print("---------- Artists ----------\n")
+    print_artists()
+    print("\n---------- Schedule ----------\n")
+    print("\n---------- Venues ----------\n")
+    display_venues()
+    print("\n---------- Tickets/attendees ----------\n")
+
+def time_menu():
+    while True:
+        os.system('cls')
+        print('"---------- Time ----------')
+        match input('What do you want to do with time? \nSee Time Table \n2. Modify Festival Hours \n3. Set Performances \n6.'):
+            case '1':
+                print_timetable()
+            case '2':
+                modify_festival_length()
+            case '3':
+                performancesInDay()
+            case '6':
+                main()
+                break
+            case _:
+                input('Invalid Input')
+
+def artist_menu():
+    while True:
+        os.system('cls')
+        print('"---------- Artists ----------')
+        match input('What do you want to do with the artists? \n1. See Artists \n2. Add Artist \n3. Remove Artist \n4. Modify Artist \n6. Go Back \n'):
+            case '1':
+                print_artists()
+            case '2':
+                add_artist()
+            case '3':
+                remove_artist()
+            case '4':
+                modify_artist()
+            case '6':
+                main()
+                break
+            case _:
+                input('Invalid Input')
+                
+
+def main(): #Provides a UI that branches to every part of the program, allowing modification of everything.
+    while True:
+        os.system("cls")
+        choice = input("What do you want to do?\n1. Manage artists\n2. Manage schedule\n3. Manage venues\n4. Manage ticket sales/attendees\n5. Display everything\n6. Exit program\n")
+        if choice == '1':
+            artist_menu()
+        elif choice == '2':
+            time_menu()
+        elif choice == '3':
+            venues = venue_management()
+        elif choice == '4':
+            pass
+        elif choice == '5':
+            display_all()
+        elif choice == '6':
+            break
+        else:
+            print("That isn't on the list of options. Try again.")

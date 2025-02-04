@@ -1,10 +1,4 @@
-heheheha = [
-    {
-        'Time': '10:30',
-        'Activity': 'Eminem Performance'
-    },
-    {
-        'Time': '11:00',
-        'Activity': 'Empty'
-    }
-]
+def add(addend1, addend2):
+    return addend1+addend2
+
+print(add(1,2))
